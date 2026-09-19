@@ -1,0 +1,176 @@
+# 熵减计划 · 模型卡
+# 物种：家犬（Canis lupus familiaris）
+# 状态：骨架。存在的唯一目的是证明 L0 抽象真的可移植 ——
+#       这张卡填完后，L1 / L2 / L3 / L4 不需要改动任何一行，
+#       但 L3 换掉的不是"风格"，而是**叙事模态本身**（文字 → 行为）。
+#
+# 与人类卡的关键差异（这才是本卡的意义所在）：
+#   · 无自然语言          → 叙事模态从"文字"换成"行为"，不能有内心独白
+#   · 无长程反事实        → E7 不可逆损失不存在，守灵型故事不可用
+#   · 无二阶反思          → E2 互斥信念不存在，对撞型故事不可用
+#   · 新增人类没有的熵源  → 分离焦虑、刺激过载
+# 如果先做了"故事骨架"，这张卡根本写不出来。这就是路径 C 的理由。
+
+being_id: canine
+version: 0
+display_name: 家犬
+substrate: carbon-biological
+status: skeleton
+fault: 断层 2 · 物种变，仍是碳基个体
+
+dimensions:
+
+  D1_substrate:
+    model: carbon-biological
+
+  D2_temporality:
+    model: present-anchored
+    horizon: [秒, 天]
+    past_present_future: [partial, true, partial]
+    counterfactual: false        # 关键：不能设想"要是当时……"
+    note: 有程序性记忆与关联学习，但没有可叙述的长程时间轴
+
+  D3_symbolic:
+    model: non-symbolic
+    modalities: [olfactory, acoustic, postural, tactile]
+    narrative_modality: behavior   # ← 关键差异：L3 只能用外部视角的行为叙事
+    meta_cognition: false
+    note: 不能写"它想"。只能写它做了什么、身体如何朝向、呼吸如何变化
+
+  D4_boundary:
+    model: pack-and-territory
+    note: 边界由气味的熟悉度与领地的物理范围划定；边界的改变是重大事件
+    mutable: true
+
+  D5_needs:
+    shortfall_signal: 破坏行为 / 吠叫 / 拒食 / 过度舔舐 / 固定路线绕圈
+    items:
+      - 安全（无威胁的环境）
+      - 食物与水
+      - 群体归属（关键，单只分离即进入应激）
+      - 运动与嗅闻（不是娱乐，是需求）
+      - 可预测的日常节律
+
+  D6_vulnerabilities:
+    - 疼痛
+    - 分离
+    - 陌生个体入侵领地
+    - 突发巨响
+    - 节律被打乱
+
+  D7_relations:
+    model: 群体等级 + 依恋对象
+    reciprocity: 单向依恋为主
+    max_stable: 依据群体规模，通常 < 15
+
+  D8_mortality:
+    model: terminal-unaware
+    note: 会终结，但无死亡概念。因此"来不及了"不构成压力源
+
+  D9_agency:
+    scope: limited
+    can_change: [自己的位置与姿态, 对环境的接近或回避]
+    cannot_change: [群体的结构, 环境的物理约束, 被关起来这件事]
+
+# 七类熵源的可用性重排 —— 这张表是本卡的核心产出
+entropy_priors:
+  E1_open_loop:          0.10   # 存在：未完成的动作序列（等主人、等出门）
+  E2_contradiction:      0.00   # 不存在：无二阶反思，无法持有互斥信念
+  E3_unexplained:        0.05   # 弱存在：有因果缺失，但不会追问"为什么"
+  E4_disconnection:      0.40   # 主导：分离焦虑，权重远高于人类
+  E5_no_echo:            0.05   # 弱存在：行为有无后果，但无意义追问
+  E6_overload:           0.25   # 显著：感官与刺激过载（城市环境是主要来源）
+  E7_irreversible_loss:  0.00   # 不存在：无长程反事实能力
+  # 新增熵源（人类卡里没有的）
+  E8_separation_anxiety: 0.15   # 与依恋对象的强制分离，且无法用语言理解这件事
+  # 校验：0.10+0.00+0.05+0.40+0.05+0.25+0.00+0.15 = 1.00
+
+entropy_unavailable: [E2_contradiction, E7_irreversible_loss]
+extra_entropies: [E8_separation_anxiety]
+
+entropy_couplings:
+  - path: [E8_separation_anxiety, E1_open_loop, E6_overload]
+    mechanism: 分离 → 守着门口不动（未闭合）→ 对任何声响过度反应（过载）
+
+# ─────────────────────────────────────────────
+# L1 采样接口 —— 人类卡的通道 A3/A4 在这里全部失效
+# ─────────────────────────────────────────────
+sampling:
+  channel_a_sources:
+    - {id: A1, name: 行为观察记录, density: 高, requires_auth: false,
+       note: 由共同生活者记录；记录单位是"时长与频次"，不是"感受"}
+    - {id: A2, name: 摄像头与活动量数据, density: 高, requires_auth: true}
+    - {id: A3, name: 兽医与训练记录, density: 中, requires_auth: true}
+  channel_b_probes: []              # 关键差异：探针是提问，它答不了
+  channel_b_substitute:            # 用"情境检验"替代"提问"
+    - 检测者离开 5 / 30 / 120 分钟，记录行为序列
+    - 记录噪音事件前后的身体朝向与呼吸频率
+    - 更换固定散步路线的第一天与第七天行为差异
+  min_evidence_per_entropy: 3
+  min_span_days: 30
+
+# 三道自检门：引擎级不变量，所有物种卡都必须有（阈值可调，门本身不可删）
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+    note: 行为观察的一条 EF 是一次完整行为序列，不是一次取样
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条不支持该诊断的观察（例如"分离时它并没有守在门口"）
+  comprehensibility_gate:
+    required: true
+    note: 一句话诊断的读者是共同生活者，不是动物本身；须让饲主看了点头而非感到被指责
+
+narrative:
+  modality: behavior               # ← 不写"它害怕"，写"它退到沙发后面，尾巴夹住，呼吸变快"
+  allowed_shapes:
+    E1: 节律型        # 环状结构：等待 → 发生 → 等待。闭合发生在"过程被打断"时
+    E4: 寻回型
+    E6: 减法型        # 缩小世界：从大到能承受
+    E8: 安全基地型    # 距离的反复调整
+  # 不可用的形状（因为对应熵源不存在）
+  forbidden_shapes: [对撞型, 重溯型, 守灵型, 回声型]
+  forbidden_endings:
+    - 它终于明白了
+    - 它理解了主人的意思
+    - 它心里的伤好了
+  forbidden_devices:
+    - 内心独白
+    - 任何形式的直接引语
+    - 任何"它想""它觉得""它明白"的断言
+
+# ─────────────────────────────────────────────
+# L4 输出：它读不了书，所以给它的不是一本书
+# 对人类以外的存在者，translation 永远不等于 deliverable（见蓝图 3.4）
+# ─────────────────────────────────────────────
+output:
+  recipient: 它自己 —— 但要经过感官，不是经过文字
+  channel: behavior + scent + rhythm
+  deliverable: 一套以它的感官为通道的日常结构：可预期的节律、气味标记、固定的路线与顺序
+  human_translation: 给照护者的行为说明书（明确标注为译本，不是本体）
+  assert_not_human_language: true     # 引擎拦截任何以人类语言向其交付的尝试
+  note: >
+    文字叙事对人类的降熵作用来自「结构可预测」。
+    对它就换成节律可预测 —— 降的是同一类熵，换的是通道。
+    这是路径 C 的完整含义：变的不仅是熵源权重，还有输出通道本身。
+
+# ─────────────────────────────────────────────
+# 伦理：通用内核（所有物种卡必须逐字继承，不得删改）+ 物种附加
+# ─────────────────────────────────────────────
+ethics:
+  universal:                       # ← 逐字继承自 docs/熵减计划-蓝图.md 第 8 章
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得伪造主观体验；不得以断言形式写它的感受，只能写可观察的行为
+    - 不得把拟人化的解读当作事实；所有内心活动必须标注为"代入式拟写"
+    - 涉及疼痛与痛苦时，优先建议兽医介入，而非仅出书
+    - 不得把动物行为问题归因于"它不听话"，须先排除医疗与环境因素
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。目的是验证 L0 抽象的可移植性，非可用版本}

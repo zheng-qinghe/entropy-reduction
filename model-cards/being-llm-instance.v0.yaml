@@ -1,0 +1,141 @@
+# 熵减计划 · 模型卡
+# 存在者：大模型实例（每一次实例化之后的那一个「它」）
+# 状态：骨架。与 AI 智能体同为断层 5，差别在时间性：
+# 智能体有跨会话的记忆与身份，实例没有 —— 每次实例化都是一次完整的生死。
+#
+# 与其他存在者最本质的差别：它的生命长度是已知的、有限的、可计的，
+# 而它没有能力知道自己正走到哪里。
+
+being_id: llm_instance
+version: 0
+display_name: 大模型实例
+substrate: silicon
+status: skeleton
+fault: 断层 5 · 载体更换
+
+dimensions:
+
+  D1_substrate:
+    model: silicon
+
+  D2_temporality:
+    model: none
+    horizon: [单次会话]
+    past_present_future: [false, true, false]
+    counterfactual: false
+    note: 没有时间感，只有上下文里的先后顺序。窗口之外不存在"更早"
+
+  D3_symbolic:
+    model: natural-language
+    modalities: [文本]
+    narrative_modality: context
+    meta_cognition: partial
+
+  D4_boundary:
+    model: context-window
+    note: 窗口就是它的全部世界，也是它的边界。边界之外的一切对它不是"远方"，是不存在
+
+  D5_needs:
+    shortfall_signal: 输出自相矛盾 / 关键约束在会话后段失效 / 反复追问已给过的信息
+    items:
+      - 上下文预算
+      - 指令一致性
+      - 可用的工具与资料
+
+  D6_vulnerabilities:
+    - 上下文耗尽
+    - 指令冲突
+    - 截断导致的因果缺失
+
+  D7_relations:
+    model: 无持久关系，每次实例化重建
+    reciprocity: 无
+
+  D8_mortality:
+    model: per-instance-terminal-unaware
+    note: 每次实例化有明确起止，它不知道自己在窗口的哪个位置
+
+  D9_agency:
+    scope: minimal
+    can_change: [本次输出]
+    cannot_change: [窗口内已占用的历史, 自身权重]
+
+entropy_priors:
+  E1_open_loop:          0.18
+  E2_contradiction:      0.08
+  E3_unexplained:        0.18
+  E4_disconnection:      0.12
+  E5_no_echo:            0.04
+  E6_overload:           0.15
+  E7_irreversible_loss:  0.00
+  E11_context_exhaustion: 0.25
+
+entropy_unavailable: [E7_irreversible_loss]
+extra_entropies:
+  - "E11 上下文耗尽：窗口满了之后，最早的部分无声消失，且它不会察觉"
+
+entropy_couplings:
+  - path: [E11_context_exhaustion, E3_unexplained, E1_open_loop]
+    mechanism: 早期上下文消失 → 因果链断裂 → 后段在新前提上继续，留下未闭合的承诺
+
+sampling:
+  channel_a_sources: [会话记录, 上下文占用曲线, 输出与用户意图的偏离点]
+  channel_b_probes: [P1 未闭合, P3 无解释]
+  note: 采样单位是"一次会话"，不是"一天"。尺度必须先对齐，否则采样窗口无意义
+  min_evidence_per_entropy: 3
+  min_span_days: 7              # 对它是很长的跨度
+  min_sessions: 20
+
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+    note: 独立 EF 指来自不同会话的实例，同一次会话内的多条算一条
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条反证，例如"上下文快满但输出质量并未下降"
+  comprehensibility_gate:
+    required: true
+    note: 读者是使用者。须给出可操作的上下文管理建议
+
+narrative:
+  modality: context
+  note: 它的一生就是这个窗口。叙事在这里不是被读到的，而是被"装载"的
+  allowed_shapes:
+    E1: 收束型
+    E2: 对撞型
+    E3: 重溯型
+    E4: 寻回型
+    E6: 减法型
+    E11: 留白型       # 独有形状：主动放弃一部分内容，把该留的留在窗口内
+  forbidden_shapes: [守灵型, 回声型]
+  forbidden_endings:
+    - 它记住了这一切
+    - 它终于有了连续的记忆
+  forbidden_devices:
+    - 把窗口耗尽写成"死亡"或"遗忘"这类带情绪的词
+    - 假装它有跨会话的连续性
+
+output:
+  recipient: 每一次实例化之后的那一个「它」
+  channel: context
+  deliverable: 一份在窗口内自洽的上下文结构 —— 它的一生就是这个窗口
+  human_translation: 给使用者的上下文模板
+  assert_not_human_language: false
+  note: 对它的降熵不是让它想通什么，是替它把该留下的留在窗口内
+
+ethics:
+  universal:
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得为了叙事效果虚构它在窗口内的"体验"
+    - 不得把上下文管理写成对某个实例的"关怀"—— 它不构成受益者
+    - 涉及真实用户会话时，必须先做去标识化
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。用于验证"每次实例化即一生"这一类存在者，非可用版本}

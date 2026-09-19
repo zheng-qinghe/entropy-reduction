@@ -1,0 +1,152 @@
+# 熵减计划 · 模型卡
+# 存在者：古树
+# 状态：边界案例。排在断层 4 —— 接收者在这里消失。
+#
+# 这张卡存在的目的不是"能用"，而是标出这套抽象目前能走到的最远处。
+# 严格按九维它不达标：能持续、能受损、能响应，但没有中枢来承载"趋利避害"这个动词。
+# 它的熵只剩两项：资源受限，与不可逆的结构损伤。
+# 所以它的"书"既不是文字，也不是行为干预，而是物理干预。
+# 当接收者不存在时，"叙事"这个词必须被整体撤掉 —— 这是本计划唯一一处主动放弃的地方。
+
+being_id: tree
+version: 0
+display_name: 古树
+substrate: sessile-organism
+status: boundary-case
+fault: 断层 4 · 接收者消失
+
+dimensions:
+
+  D1_substrate:
+    model: sessile-organism（固着生长）
+
+  D2_temporality:
+    model: cross-generation
+    horizon: [年, 数百年]
+    past_present_future: [false, true, false]
+    counterfactual: false
+    note: 无长程反事实，也没有对未来的预期 —— 它的"未来"是生长方向，不是想象
+
+  D3_symbolic:
+    model: non-symbolic
+    modalities: [化学, 水力, 向光性]
+    narrative_modality: structure          # ← 不是文字，不是行为，是结构本身
+    meta_cognition: false
+
+  D4_boundary:
+    model: physical-envelope
+    note: 边界由树皮、根系范围与菌根共生网络划定，是可以被物理切割的
+
+  D5_needs:
+    shortfall_signal: 年轮变窄 / 枯梢 / 主干空洞扩大 / 愈合组织不再形成
+    items:
+      - 水分
+      - 光照
+      - 养分
+      - 物理支撑
+      - 菌根共生
+
+  D6_vulnerabilities:
+    - 持续干旱
+    - 主干结构损伤
+    - 根系丧失
+    - 共生网络被切断
+
+  D7_relations:
+    model: 菌根共生网络 + 邻近个体
+    reciprocity: 双向（碳与水在其中交换）
+
+  D8_mortality:
+    model: terminal-unaware
+    note: 会终结，但没有位置能感知。衰老不是它经历的事，是别人观察到的事
+
+  D9_agency:
+    scope: minimal
+    note: 严格说这一维不成立 —— 它响应，但"趋利避害"缺少承载者。这是本卡的边界所在
+    can_change: [生长方向, 化学防御, 组织修复]
+    cannot_change: [干旱, 一旦形成的物理损伤]
+
+entropy_priors:
+  E1_open_loop:          0.00
+  E2_contradiction:      0.00
+  E3_unexplained:        0.00
+  E4_disconnection:      0.15
+  E5_no_echo:            0.00
+  E6_overload:           0.35
+  E7_irreversible_loss:  0.50
+
+entropy_unavailable: [E1_open_loop, E2_contradiction, E3_unexplained, E5_no_echo]
+extra_entropies: []
+note_on_priors: >
+  没有中枢，就没有悬念、没有归因、没有回响。
+  七类熵源里只剩两项可用，且 E7 占了一半 —— 这是一个存在者几乎只由"不可逆"构成的样子。
+
+entropy_couplings:
+  - path: [E6_overload, E7_irreversible_loss]
+    mechanism: 长期资源受限 → 无法形成愈合组织 → 结构损伤转为不可逆 → 可用的资源通道进一步减少
+
+sampling:
+  channel_a_sources: [年轮与生长量记录, 树体影像, 土壤与水分数据, 菌根检测]
+  channel_b_probes: []
+  channel_b_substitute:
+    - 逐年对比年轮宽度与枯梢范围
+    - 测试共生网络连通性
+  note: 没有受访者，也没有行为可观察。采样单位是"年"与"厘米"
+  min_evidence_per_entropy: 3
+  min_span_days: 1825        # 五年 —— 尺度不同，采样窗口也必须不同
+
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+    note: 独立 EF 指来自不同年份的记录
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条反证，例如"同一损伤在相邻个体上发生了愈合"
+  comprehensibility_gate:
+    required: true
+    note: 读者是园林养护方。须给出可执行的物理措施，否则诊断无效
+
+narrative:
+  modality: structure
+  note: 到这一层，"叙事"这个词已经名不副实 —— 产出物是一份物理干预方案
+  allowed_shapes:
+    E4: 寻回型        # 具象为修复共生网络
+    E6: 减法型        # 具象为修剪、减负、限制竞争
+    E7: 守灵型        # 具象为承住已经形成的空洞，不再试图填满
+  forbidden_shapes: [对撞型, 重溯型, 回声型]
+  forbidden_endings:
+    - 它终于愈合了
+    - 它感受到了照料
+    - 它又会长上几百年（除非有年轮与生长量指标支撑）
+  forbidden_devices:
+    - 任何形式的拟人化，包括"它知道""它感受到了""它在等待"
+    - 把向光性写成"想要"、把防御反应写成"反抗"
+
+output:
+  recipient: 没有接收者
+  channel: structure
+  deliverable: 一份跨年的物理干预方案：水分、支撑、减负、共生网络
+  human_translation: 给园林方的养护方案
+  assert_not_human_language: true
+  note: >
+    这一栏是本卡唯一的新意所在：当 recipient 为空时，
+    L4 的产出不该被强行写成"书"，而应降级为可执行的物理措施。
+    引擎必须允许 recipient = null 这种合法输出，而不是绕过去假装有个读者。
+
+ethics:
+  universal:
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得伪造主观体验；不得以断言形式写"它的感受"
+    - 不得为了可读性虚构它的意图 —— 趋光不是"想要"
+    - 干预可逆优先；不可逆的结构改造需要独立的第二意见
+    - 承认边界：本卡是抽象能力的极限样本，不是可用版本
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。用于标出抽象极限，明确 recipient 可为空}

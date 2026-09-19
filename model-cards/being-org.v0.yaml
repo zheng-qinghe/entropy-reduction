@@ -1,0 +1,145 @@
+# 熵减计划 · 模型卡
+# 存在者：人类组织（公司 / 团队）
+# 状态：骨架。它排在断层 1 —— 紧挨人类的位置。
+#
+# 为什么断层 1 放的不是别的物种：最像人的非人存在者不是家犬，是一家公司。
+# 它有语言、有记忆（文档）、有目标，却没有统一的感官，也没有一个能说「我」的位置。
+# 所以它的处方落在制度上，不落在情绪上。
+
+being_id: org
+version: 0
+display_name: 人类组织
+substrate: collective
+status: skeleton
+fault: 断层 1 · 规模变，载体不变
+
+dimensions:
+
+  D1_substrate:
+    model: collective（公司 / 团队 / 机构）
+
+  D2_temporality:
+    model: multi-generation
+    horizon: [季度, 数十年]
+    past_present_future: [true, true, true]
+    counterfactual: true
+    note: 时间感由文档与制度承载，不依赖任何单个成员。成员全换，它还记得
+
+  D3_symbolic:
+    model: natural-language + formal
+    modalities: [文档, 会议, 流程, 财务, 组织架构]
+    narrative_modality: text
+    meta_cognition: partial
+    note: 它能反思，但反思的对象是制度，不是自己
+
+  D4_boundary:
+    model: institutional
+    note: 边界由股权、雇佣关系与品牌划定。成员进出不改变边界 —— 这一点与生物存在者相反
+    mutable: true
+
+  D5_needs:
+    shortfall_signal: 现金流断裂 / 决策停摆 / 核心人流失 / 内部派系化
+    items:
+      - 现金流
+      - 合法性与合规
+      - 人才
+      - 市场位置
+      - 内部共识
+
+  D6_vulnerabilities:
+    - 现金流断裂
+    - 关键人流失
+    - 声誉受损
+    - 目标互斥导致的执行瘫痪
+    - 合规风险
+
+  D7_relations:
+    model: 上下游 + 员工 + 投资方 + 监管
+    reciprocity: 双向但不对称
+
+  D8_mortality:
+    model: terminal-unaware
+    note: 会终结（解散 / 破产），但没有任何一个位置能感知自己的终结
+
+  D9_agency:
+    scope: partial
+    can_change: [资源分配, 人事, 产品方向, 制度]
+    cannot_change: [市场条件, 已签约的承诺, 成员的个人意愿]
+
+entropy_priors:
+  E1_open_loop:          0.15
+  E2_contradiction:      0.20
+  E3_unexplained:        0.10
+  E4_disconnection:      0.15
+  E5_no_echo:            0.15
+  E6_overload:           0.20
+  E7_irreversible_loss:  0.05
+
+entropy_unavailable: []
+extra_entropies: ["E2 组织化互斥：部门各自正当的目标无法同时满足"]
+
+entropy_couplings:
+  - path: [E6_overload, E1_open_loop, E2_contradiction]
+    mechanism: 并行项目超载 → 议题被搁置 → 各部门各自解释 → 目标互斥被固化成派系
+  - path: [E4_disconnection, E5_no_echo]
+    mechanism: 关键人离开 → 他推动的事无人接手 → 之前的投入变成无回响
+
+sampling:
+  channel_a_sources: [会议记录, 决策文档, 组织架构与人事变动, 项目看板, 对外沟通]
+  channel_b_probes: [P2 目标冲突, P4 关键关系, P6 项目取舍]
+  note: >
+    探针的受访者是成员个体，但诊断对象是组织 —— 两者必须分开落盘。
+    把某个成员的情绪当成组织的熵，是这个物种最容易犯的采样错误。
+  min_evidence_per_entropy: 3
+  min_span_days: 180
+
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+    note: 独立 EF 指来自不同会议 / 不同时期的记录，同一份纪要里的多条不算独立
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条与诊断相反的证据（例如"某次搁置其实是有意的阶段性选择"）
+  comprehensibility_gate:
+    required: true
+    note: 读者是决策层，不是全体员工。须让决策层看了点头，而不是感到被审判
+
+narrative:
+  modality: text
+  form: 章程式叙事 —— 把组织的经历讲成一份可执行的故事
+  allowed_shapes:
+    E1: 收束型
+    E2: 对撞型        # 具象为两个部门各自的正当性正面相撞
+    E3: 重溯型        # 具象为一次失败决策重新归因
+    E4: 寻回型        # 具象为断裂的上下游关系重新定性
+    E5: 回声型        # 具象为早年投入在后来某个项目上显形
+    E6: 减法型        # 具象为砍掉项目并承担代价
+    E7: 守灵型        # 具象为关闭的产品线、离开的人
+  forbidden_endings: [统一思想, 战略升级后全都保住了, 换了负责人就好了]
+  forbidden_lexicon: [赋能, 抓手, 闭环, 心智, 打法, 生态位]
+
+output:
+  recipient: 组织成员与决策层（不是某个个人）
+  channel: text
+  deliverable: 一份把组织的经历讲成可执行故事的章程 —— 谁的、为什么、下一步谁做什么
+  human_translation: 成员读的那份就是本体（它与人共享文字通道）
+  assert_not_human_language: false
+  note: 交付物的最后一段必须是可以指派到人和日期的，否则它只是一份漂亮的总结
+
+ethics:
+  universal:
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得把组织的困境归因于某个成员的个人品质
+    - 不得替组织决定优先放弃谁 —— 排序权归决策层，引擎只呈现代价
+    - 涉及具体成员时只写其行为与处境，不写对其动机的判断
+    - 不得把裁员、关停等不可逆决定包装成"成长"或"聚焦"
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。用于验证「集体」这一类存在者的接入，非可用版本}

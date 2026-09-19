@@ -1,0 +1,147 @@
+# 熵减计划 · 模型卡
+# 存在者：蜂群（超个体）
+# 状态：骨架。排在断层 3 —— 个体性在这里消失。
+#
+# 这张卡要证明的是：当「个体」这个前提本身不成立时，
+# 熵源分类学仍然工作，只是全部上移到群体层；而「书」没有个体读者。
+
+being_id: colony
+version: 0
+display_name: 蜂群
+substrate: superorganism
+status: skeleton
+fault: 断层 3 · 个体性消失
+
+dimensions:
+
+  D1_substrate:
+    model: superorganism（超个体 / 群体）
+
+  D2_temporality:
+    model: seasonal
+    horizon: [小时, 一年]
+    past_present_future: [false, true, partial]
+    counterfactual: false
+    note: 时间感由季节与蜜源节律承载，不经过任何个体的记忆
+
+  D3_symbolic:
+    model: chemical
+    modalities: [信息素, 振动, 体态]
+    narrative_modality: pheromone
+    meta_cognition: false
+
+  D4_boundary:
+    model: colony-membrane
+    note: 边界由巢脾结构与群体气味标识划定；外来个体必须被重新"贴标签"才能进入
+    mutable: true
+
+  D5_needs:
+    shortfall_signal: 弃巢 / 分蜂异常 / 采集衰退 / 巢温失控
+    items:
+      - 蜂王与繁殖
+      - 食物储备
+      - 巢脾空间
+      - 温度与湿度调节
+      - 病原与寄生物防御
+
+  D6_vulnerabilities:
+    - 信息素通路中断
+    - 分工比例失衡
+    - 蜜源通道被切断
+    - 气候极端与农药暴露
+    - 寄生物与病原
+
+  D7_relations:
+    model: 蜜源植物 + 共生微生物 + 邻近蜂群
+    reciprocity: 不对称（授粉是副产品，不是契约）
+
+  D8_mortality:
+    model: individual-replaceable / queen-terminal
+    note: 个体死亡是程序，不是事件。蜂王更替是分蜂的组成部分，不是损失
+
+  D9_agency:
+    scope: limited
+    can_change: [巢脾结构, 分工比例, 采集路线]
+    cannot_change: [气候, 蜜源分布, 农药暴露]
+
+entropy_priors:
+  E1_open_loop:          0.10
+  E2_contradiction:      0.00
+  E3_unexplained:        0.05
+  E4_disconnection:      0.30
+  E5_no_echo:            0.00
+  E6_overload:           0.25
+  E7_irreversible_loss:  0.00
+  E10_caste_ratio:       0.30
+
+entropy_unavailable: [E2_contradiction, E5_no_echo, E7_irreversible_loss]
+extra_entropies:
+  - "E10 分工比例失调：采集蜂／哺育蜂比例失衡，群体自我维持能力下降"
+
+entropy_couplings:
+  - path: [E4_disconnection, E10_caste_ratio, E6_overload]
+    mechanism: 蜜源通道被切断 → 采集蜂比例被迫上调 → 哺育能力下降 → 群体整体抗压能力下滑
+
+sampling:
+  channel_a_sources: [巢内观察记录, 出入巢计数, 巢脾结构影像, 重量与温湿度传感器]
+  channel_b_probes: []
+  channel_b_substitute:
+    - 人为改变蜜源距离，记录一周内的分工比例变化
+    - 移除部分巢脾，记录重建顺序与速度
+    - 引入外来个体，记录气味重贴标签所需时间
+  note: 没有受访者，所以没有提问；只有情境检验。这也是本卡与人类卡最根本的方法论差异
+  min_evidence_per_entropy: 3
+  min_span_days: 180
+
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+    note: 独立 EF 指来自不同季节或不同巢群的观察，同一巢群同一天的连续记录算一条
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条不支持该诊断的观察，例如"分工比例失衡但群体存续正常"
+  comprehensibility_gate:
+    required: true
+    note: 读者是养蜂人。须让他能据此做出具体操作，而不是读完觉得"有道理"
+
+narrative:
+  modality: pheromone + structure
+  note: 这里的"叙事"不是一个文本，而是一套让群体重新获得可预测性的环境与信息结构
+  allowed_shapes:
+    E4: 寻回型        # 具象为重新接通蜜源与信息素通路
+    E6: 减法型        # 具象为缩小活动半径、减少巢脾负担
+    E10: 比例复原型   # 独有形状：把失衡的分工比例调回可自我维持的区间
+  forbidden_shapes: [对撞型, 重溯型, 守灵型, 回声型]
+  forbidden_endings:
+    - 蜂群终于明白了
+    - 它理解了养蜂人的用意
+    - 群体恢复了健康（除非有可观测指标支撑）
+  forbidden_devices:
+    - 任何个体视角的内心独白
+    - 把群体写成有统一意志的主体
+
+output:
+  recipient: 群体本身 —— 单只蜂不构成接收者
+  channel: pheromone + structure
+  deliverable: 群体层的信息与结构调制：信息素通路、巢脾结构、分工比例
+  human_translation: 给养蜂人的群体状态说明
+  assert_not_human_language: true
+  note: 干预必须可观测、可回退。看不出变化的"调理"不算降熵
+
+ethics:
+  universal:
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得把群体状态归因于单只蜂
+    - 不得把"分蜂"写成损失 —— 那是它的繁殖，不是它的失败
+    - 结构性干预优先于化学通路干预；能改巢脾的，不改信息素
+    - 不得以"为蜂群好"为名做无法观察验证的干预
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。用于验证「个体性消失」这一类存在者的接入，非可用版本}

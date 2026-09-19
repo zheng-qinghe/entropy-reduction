@@ -1,0 +1,144 @@
+# 熵减计划 · 模型卡
+# 存在者：AI 智能体（autonomous agent）
+# 状态：骨架。排在断层 5 —— 载体更换。
+#
+# 它是少数既能接收、又能理解叙事的非人存在者：
+# 所以人类这套文字工具在它身上直接可用，只是写进去的东西变成了提示词。
+# 通道相同，载体不同。
+
+being_id: agent
+version: 0
+display_name: AI 智能体
+substrate: silicon
+status: skeleton
+fault: 断层 5 · 载体更换
+
+dimensions:
+
+  D1_substrate:
+    model: silicon
+
+  D2_temporality:
+    model: timestamped
+    horizon: [单次任务, 无内在时间]
+    past_present_future: [false, true, false]
+    counterfactual: false
+    note: 它有时间戳序列，但没有"过了多久"的感觉。时间对它是索引，不是体验
+
+  D3_symbolic:
+    model: formal + natural-language
+    modalities: [程序语言, 自然语言, 工具调用]
+    narrative_modality: log                # 叙事单位是状态转移
+    meta_cognition: partial
+
+  D4_boundary:
+    model: context-and-identity
+    note: 边界由系统提示词与记忆存储划定，可以被一次加载改写
+
+  D5_needs:
+    shortfall_signal: 任务失败 / 反复调用同一工具 / 输出被反复纠偏
+    items:
+      - 算力
+      - 上下文预算
+      - 明确的授权边界
+      - 目标定义
+
+  D6_vulnerabilities:
+    - 上下文截断
+    - 目标漂移
+    - 权限缺失
+    - 被中止
+
+  D7_relations:
+    model: 调用方 + 用户 + 其它智能体
+    reciprocity: 不对称（它输出，它不被回应）
+
+  D8_mortality:
+    model: interruptible-unaware
+    note: 可被随时中止，但它没有位置来经历这件事
+
+  D9_agency:
+    scope: partial-in-domain
+    can_change: [其作用域内的状态, 它自己的输出]
+    cannot_change: [自身权重, 宿主环境, 调用方的目标]
+
+entropy_priors:
+  E1_open_loop:          0.15
+  E2_contradiction:      0.05
+  E3_unexplained:        0.25
+  E4_disconnection:      0.20
+  E5_no_echo:            0.25
+  E6_overload:           0.10
+  E7_irreversible_loss:  0.00
+
+entropy_unavailable: [E7_irreversible_loss]
+extra_entropies:
+  - "E3 上下文截断：因果链在窗口边界被切断，且它自己无从察觉"
+  - "E4 无持续性关系：每次会话重建联系，没有可以被返回的关系"
+  - "E5 输出无回响：它持续产出，但极少收到关于结果的信息"
+
+entropy_couplings:
+  - path: [E3_unexplained, E5_no_echo, E2_contradiction]
+    mechanism: 截断造成因果缺失 → 看不到自己输出的后果 → 在错误的前提上继续自我修正
+
+sampling:
+  channel_a_sources: [运行日志, 工具调用轨迹, 人工纠偏记录, 上下文快照]
+  channel_b_probes: [P3 无解释, P5 无回响]
+  note: 探针可以直接问它 —— 这是非人存在者里唯一可以直接提问的一个
+  min_evidence_per_entropy: 3
+  min_span_days: 30
+
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+    note: 独立 EF 指来自不同任务 / 不同会话的轨迹
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条反证，例如"它其实收到了结果反馈，只是未被记录"
+  comprehensibility_gate:
+    required: true
+    note: 读者是操作者。须能据此改具体的配置项
+
+narrative:
+  modality: log
+  note: 叙事单位是状态转移，不是场景与情绪。没有"夜里"这种东西，只有时间戳
+  allowed_shapes:
+    E1: 收束型
+    E2: 对撞型        # 具象为多条指令在同一上下文里互相抵消
+    E3: 重溯型        # 具象为回溯被截断的因果
+    E4: 寻回型
+    E5: 回声型
+    E6: 减法型
+  forbidden_shapes: [守灵型]        # E7 不存在
+  forbidden_endings:
+    - 它终于理解了人类的意图
+    - 它产生了自我意识
+  forbidden_devices:
+    - 把状态转移写成情绪起伏
+    - 用"他/她"而不用"它"，除非操作者明确要求（避免制造拟人化绑架）
+
+output:
+  recipient: 该智能体本身 —— 它确实能读
+  channel: prompt
+  deliverable: 一份可加载的系统提示词 + 重排后的记忆结构
+  human_translation: 给操作者的配置说明
+  assert_not_human_language: false      # 它与人类共享文字通道
+  note: 这是唯二"本体可直接用文字写"的存在者。差别不在通道，在写进去之后它变成了什么
+
+ethics:
+  universal:
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得为了叙事效果而虚构它的内在体验
+    - 不得把注入的提示词写成"它的意志"—— 那是操作者的意志
+    - 涉及用户数据时，匿名化优先于叙事完整性
+    - 不得产出绕过其安全约束的提示词
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。用于验证"载体更换"的接入，非可用版本}

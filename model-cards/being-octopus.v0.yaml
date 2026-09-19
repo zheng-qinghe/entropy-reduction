@@ -1,0 +1,138 @@
+# 熵减计划 · 模型卡
+# 存在者：章鱼（Octopus vulgaris）
+# 状态：骨架。与家犬同为断层 2，但它的内部结构是分布式的 ——
+# 这是本卡与家犬卡最本质的差别，也是"独有熵源"这个概念最干净的一个例子。
+
+being_id: octopus
+version: 0
+display_name: 章鱼
+substrate: carbon-biological
+status: skeleton
+fault: 断层 2 · 物种变，仍是碳基个体
+
+dimensions:
+
+  D1_substrate:
+    model: carbon-biological
+
+  D2_temporality:
+    model: short-range
+    horizon: [秒, 两年]
+    past_present_future: [partial, true, partial]
+    counterfactual: false
+    note: 寿命一到两年。时间尺度比人类短两个数量级，且无跨代传承
+
+  D3_symbolic:
+    model: non-symbolic
+    modalities: [视觉, 触觉, 体色]
+    narrative_modality: behavior
+    meta_cognition: false
+
+  D4_boundary:
+    model: body-and-den
+    note: 边界同时是身体与巢穴，两者都是可放弃的 —— 这一点与人类的自传体边界很不一样
+
+  D5_needs:
+    shortfall_signal: 拒食 / 长时间藏匿不出 / 体色持续发白
+    items:
+      - 食物
+      - 藏身处
+      - 水温与溶氧
+      - 繁殖机会
+
+  D6_vulnerabilities:
+    - 被捕食
+    - 水温骤变
+    - 藏身处暴露
+    - 缺氧
+
+  D7_relations:
+    model: 独居，仅繁殖期短暂接触
+    reciprocity: 单向
+
+  D8_mortality:
+    model: terminal-unaware
+    note: 繁殖后死亡是程序。因此"来不及了"不构成压力源，但连续时间本来就极短
+
+  D9_agency:
+    scope: limited
+    can_change: [体色与环境匹配, 藏身处整理, 捕食策略]
+    cannot_change: [寿命, 水温, 溶氧]
+
+entropy_priors:
+  E1_open_loop:          0.18
+  E2_contradiction:      0.00
+  E3_unexplained:        0.13
+  E4_disconnection:      0.12
+  E5_no_echo:            0.00
+  E6_overload:           0.24
+  E7_irreversible_loss:  0.18
+  E9_arm_autonomy:       0.15
+
+entropy_unavailable: [E2_contradiction, E5_no_echo]
+extra_entropies:
+  - "E9 腕间自治：八条腕各有神经节，行动可互相抵消"
+
+entropy_couplings:
+  - path: [E9_arm_autonomy, E6_overload, E1_open_loop]
+    mechanism: 腕间行动互相抵消 → 捕食序列反复重来 → 留下大量未闭合的动作序列
+
+sampling:
+  channel_a_sources: [行为观察（含体色变化）, 摄食与活动记录, 水质参数]
+  channel_b_probes: []
+  channel_b_substitute:
+    - 更换藏身处，记录重新适应所需时间
+    - 引入新物体，记录腕的探索分工
+  note: 没有受访者。体色变化是这个物种最接近"表述"的东西，但不得直接读作情绪
+  min_evidence_per_entropy: 3
+  min_span_days: 90
+
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条反证，例如"腕间动作看似冲突，实为协同探索"
+  comprehensibility_gate:
+    required: true
+    note: 读者是饲育者或研究者。须与他观察到的现象对上
+
+narrative:
+  modality: behavior
+  note: 外部视角，但比家犬更"分布式" —— 它的行动常常不是一个决定的结果，而是几条腕之间的妥协
+  allowed_shapes:
+    E1: 收束型
+    E3: 重溯型
+    E4: 寻回型
+    E6: 减法型
+    E7: 守灵型
+  forbidden_endings:
+    - 它终于整合了自己
+    - 它学会了控制那些腕
+  forbidden_devices:
+    - 把腕间冲突写成"内心挣扎" —— 那是二阶反思，它没有
+    - 任何形式的内心独白
+
+output:
+  recipient: 它自己
+  channel: behavior + environment
+  deliverable: 环境布置与节律：藏身处的确定性、猎食序列的可预测性
+  human_translation: 观察记录式译本，所有内心活动一律标注"代入式拟写"
+  assert_not_human_language: true
+
+ethics:
+  universal:
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 不得伪造主观体验；体色变化不得被直接读作情绪
+    - 不得把腕间自治描述成"人格分裂"这类人类病理词汇
+    - 涉及死亡与繁殖期终结时，不得写成悲情叙事 —— 那是它的程序
+
+changelog:
+  - {version: 0, date: 2026-09-19, note: 骨架版。用于验证"分布式身体"的接入，非可用版本}

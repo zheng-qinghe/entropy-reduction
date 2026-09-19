@@ -1,0 +1,207 @@
+# 熵减计划 · 模型卡
+# 物种：人类（Homo sapiens）
+# 这是 L0 存在者本体的第一个完整实例。接入一个新物种 = 复制这张卡并填完九个维度，
+# 引擎、诊断、叙事处方三层不需要改动任何一行。
+#
+# 校验规则：本文件必须通过 scripts/validate_model_cards.py
+# 关键约束：D3.narrative_modality 决定 L3 能用什么模态讲故事；
+#           output.channel 决定 L4 往哪个通道写；
+#           缺失的熵源必须在 entropy_priors 中显式标为 0，不许省略。
+
+being_id: human
+version: 1
+display_name: 人类
+substrate: carbon-biological
+status: complete          # complete | skeleton | boundary-case
+fault: 断层 0 · 参考点
+
+# ─────────────────────────────────────────────
+# 九维存在者本体
+# ─────────────────────────────────────────────
+dimensions:
+
+  D1_substrate:
+    model: carbon-biological
+
+  D2_temporality:
+    model: long-range
+    horizon: [分钟, 一生]
+    past_present_future: [true, true, true]
+    counterfactual: true          # 能否设想"要是当时……"
+    note: 长程时间感 + 反事实能力，是 E7（不可逆损失）能成为熵源的前提
+
+  D3_symbolic:
+    model: natural-language
+    modalities: [text, speech, imagery, gesture]
+    narrative_modality: text      # ← L3 的合法叙事模态
+    meta_cognition: true          # 能反思自己的想法，二阶思维
+
+  D4_boundary:
+    model: narrative-self
+    note: >
+      边界由自传体记忆与身份认同划定，会被事件改写。
+      因此"什么算我"本身可能成为熵源（E2 互斥信念常发生在这条边界上）。
+    mutable: true
+
+  D5_needs:
+    shortfall_signal: 焦虑 / 疲惫 / 羞耻 / 空虚
+    items:
+      - 生理（氧、水、食、热、睡眠）
+      - 安全
+      - 归属
+      - 尊重
+      - 意义
+
+  D6_vulnerabilities:
+    - 疼痛
+    - 丧失
+    - 背叛
+    - 羞耻
+    - 无意义
+    - 被误解
+
+  D7_relations:
+    model: 亲属 + 同伴 + 协作网络
+    reciprocity: 双向
+    max_stable: 150             # 邓巴数，用于判断关系过载
+
+  D8_mortality:
+    model: terminal-and-aware
+    note: >
+      自知必死，且知道这个知识无法被真正消化。
+      它是意义系统的主要压力源，同时也是主要杠杆。
+    affects_entropy: [E5_no_echo, E7_irreversible_loss]
+
+  D9_agency:
+    scope: partial
+    can_change: [自己的行动, 部分环境, 部分对他人的影响]
+    cannot_change: [过去, 他人的意志, 已发生的事实]
+    note: 神经质的主要来源是"试图改变 D9 中 cannot_change 的部分"
+
+# ─────────────────────────────────────────────
+# 七类熵源先验权重（个体实例可覆盖）
+# 权重含义：在无个体材料时，该物种里这类熵源的基线重要度
+# 归一化：权重和恒为 1.00，缺失的熵源显式写 0
+# ─────────────────────────────────────────────
+entropy_priors:
+  E1_open_loop:          0.20
+  E2_contradiction:      0.18
+  E3_unexplained:        0.12
+  E4_disconnection:      0.15
+  E5_no_echo:            0.10
+  E6_overload:           0.18
+  E7_irreversible_loss:  0.07
+
+# 本物种不可用的熵源（结构上不存在，不是权重低）
+entropy_unavailable: []
+
+# 已知的典型耦合链，用于 L2 诊断时的先验
+entropy_couplings:
+  - path: [E6_overload, E1_open_loop, E2_contradiction]
+    mechanism: 过载 → 被迫搁置 → 未闭合累积 → 自责 → 信念分裂
+  - path: [E5_no_echo, E2_contradiction]
+    mechanism: 长期无反馈 → "该继续"与"该止损"同时被强化
+  - path: [E7_irreversible_loss, E3_unexplained, E1_open_loop]
+    mechanism: 失去 → 归因失败 → 冻结 → 其他未闭合也一并无法推进
+
+# ─────────────────────────────────────────────
+# L1 采样接口
+# ─────────────────────────────────────────────
+sampling:
+  channel_a_sources:
+    - {id: A1, name: 自述短文,     density: 高, social_filter: 低, requires_auth: false}
+    - {id: A2, name: 笔记与文档,   density: 高, social_filter: 低, requires_auth: true}
+    - {id: A3, name: 消息记录,     density: 高, social_filter: 高, requires_auth: true,
+       note: 只抽特征不留原文；注意职业人格会污染真实人格}
+    - {id: A4, name: 任务与日程,   density: 中, social_filter: 中, requires_auth: true,
+       note: 主要贡献 E1 与 E6 的证据}
+  channel_b_probes: [P1, P2, P3, P4, P5, P6, P7]
+  min_evidence_per_entropy: 3      # 单类熵源少于 3 条独立 EF，不得下诊断
+  min_independent_for_primary: 5   # 主熵源的门槛更高
+  min_span_days: 90
+  skip_is_data: true               # 探针被跳过 = 该熵源不确定性上调
+
+# ─────────────────────────────────────────────
+# L2 诊断门槛
+# ─────────────────────────────────────────────
+diagnosis_gates:
+  evidence_gate:
+    primary_min_ef: 8
+    primary_min_independent: 5
+  falsification_gate:
+    required: true
+    note: 必须列出至少一条不支持该诊断的材料，找不到即为采样有偏，退回 L1
+  comprehensibility_gate:
+    required: true
+    note: 一句话诊断必须能直接给当事者看，看不懂或看了想反驳则重写
+
+# ─────────────────────────────────────────────
+# L3 叙事约束
+# ─────────────────────────────────────────────
+narrative:
+  modality: text
+  allowed_shapes:
+    E1: 收束型
+    E2: 对撞型
+    E3: 重溯型
+    E4: 寻回型
+    E5: 回声型
+    E6: 减法型
+    E7: 守灵型
+  forbidden_endings:
+    - 忽然想通
+    - 贵人相助
+    - 其实可以两全
+    - 遇到新人就走出来
+    - 大家都看在眼里
+    - 优化之后全都保住了
+    - 情绪高潮收尾（拥抱 / 落泪 / 大笑）
+  forbidden_lexicon:
+    - 治愈
+    - 成长
+    - 释怀
+    - 蜕变
+    - 赋能
+    - 底层逻辑
+  handnote_rules:
+    - 人称从"他"切到"你"
+    - 禁用"你应该 / 你需要 / 真正重要的是"
+    - 只描述机制，不发出命令
+    - 占总字数 8-12%
+
+# ─────────────────────────────────────────────
+# 伦理红线（L3 / L4 强制）
+# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────
+# L4 输出：交出去的东西是给谁、以什么形态、往哪个通道写
+# 对人类以外的存在者，translation 永远不等于 deliverable（见蓝图 3.4）
+# ─────────────────────────────────────────────
+output:
+  recipient: 当事者本人
+  channel: text
+  deliverable: 一本可读的书
+  human_translation: 就是本体本身 —— 人类是唯一一个「本体」与「人类可读版本」重合的存在者
+  assert_not_human_language: false
+  note: 文字是人类这一支的通道；换物种换的是这个字段，不是引擎
+
+# ─────────────────────────────────────────────
+# 伦理：通用内核（所有物种卡必须逐字继承，不得删改）+ 物种附加
+# ─────────────────────────────────────────────
+ethics:
+  universal:                       # ← 权威版本在 docs/熵减计划-蓝图.md 第 8 章
+    - 不得替当事者定义"好结局"；价值排序必须来自他自己的材料与确认
+    - 不得制造对本书的依赖；须明确"这是照一次镜子，不是日常用品"
+    - 不得美化创伤；禁止把痛苦写成有意义的必经之路
+    - 材料仅本地处理；落盘为特征与短引用，不存原文
+    - 出现危机信号时中止生成，输出人类求助资源
+    - 每一章的情节必须有 evidence 指针，无证据者标 unverified
+  species_specific:
+    - 出现自伤 / 极端绝望 / 现实感丧失信号时，优先转介具体的人类帮助，不生成文学化的绝望
+    - 不得使用"治愈 / 成长 / 释怀 / 蜕变"这类总结性词汇收束任何一章
+    - 涉及第三方（家人、合伙人）时，只写当事者视角下的所见，不替第三方下判断
+
+# ─────────────────────────────────────────────
+# 变更记录
+# ─────────────────────────────────────────────
+changelog:
+  - {version: 1, date: 2026-09-19, note: 首版。九维、七类熵源、采样接口、诊断门槛、叙事约束、伦理红线全部定义}

@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>熵减计划 · 一台为存在者降熵的叙事引擎</title>
+<meta name="description" content="熵减计划：不是给某个人写一本书，是造一台能对任何存在者出书的机器。诊断熵源 → 开叙事处方 → 生成一本只属于它的书。">
+<style>
+:root{
+  --bg:#FBFAF7; --surface:#FFFFFF; --surface-2:#F4F2EC; --surface-3:#EDEAE1;
+  --ink:#1D1C1A; --ink-2:#56534D; --ink-3:#8A8680;
+  --line:#E4E1D8; --line-2:#D2CEC2;
+  --hi:#BA7517; --hi-ink:#633806; --hi-bg:#FAEEDA; --hi-line:#EFCF9E;
+  --lo:#0F6E56; --lo-ink:#085041; --lo-bg:#E1F5EE; --lo-line:#A9DCCC;
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",monospace;
+  --wrap:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:var(--lo-ink);text-decoration:none;border-bottom:1px solid var(--lo-line)}
+a:hover{border-bottom-color:var(--lo)}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;letter-spacing:.01em;margin:0}
+p{margin:0 0 16px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 32px}
+.mono{font-family:var(--mono);font-style:normal}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,250,247,.9);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:0 32px;height:60px;
+  display:flex;align-items:center;gap:28px}
+.brand{font-family:var(--serif);font-size:17px;font-weight:600;white-space:nowrap}
+.brand em{font-style:normal;color:var(--hi)}
+.nav-links{display:flex;gap:22px;margin-left:auto;flex-wrap:wrap}
+.nav-links a{font-size:13.5px;color:var(--ink-2);border:0;white-space:nowrap}
+.nav-links a:hover{color:var(--ink)}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:3px 9px;
+  border:1px solid var(--hi-line);background:var(--hi-bg);color:var(--hi-ink);
+  border-radius:999px;white-space:nowrap}
+
+/* hero */
+.hero{padding:74px 0 58px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1fr 400px;gap:56px;align-items:center}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  color:var(--ink-3);text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:60px;line-height:1.12;margin-bottom:20px}
+.hero h1 span{color:var(--hi)}
+.lede{font-size:18px;color:var(--ink-2);max-width:37em;margin-bottom:10px}
+.lede strong{color:var(--ink);font-weight:600}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.tag{font-size:12.5px;color:var(--ink-2);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.cta{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+.btn{display:inline-block;padding:11px 22px;border-radius:8px;font-size:14.5px;
+  border-bottom:0;white-space:nowrap}
+.btn-1{background:var(--ink);color:#fff}
+.btn-1:hover{background:#000}
+.btn-2{border:1px solid var(--line-2);color:var(--ink);background:var(--surface)}
+
+/* sections */
+section{padding:66px 0;border-bottom:1px solid var(--line)}
+.sec-head{margin-bottom:34px;max-width:44em}
+.sec-num{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--ink-3)}
+.sec-head h2{font-size:32px;line-height:1.3;margin:8px 0 12px}
+.sec-head p{font-size:16px;color:var(--ink-2);margin:0}
+.sup{font-size:14px;color:var(--ink-3)}
+
+/* cards & panels */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+.card h3{font-size:17px;margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--ink-2);margin:0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--surface-2);font-weight:600;font-size:13px;color:var(--ink-2);
+  letter-spacing:.02em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.key{white-space:nowrap;font-weight:600;color:var(--ink)}
+.tbl-scroll{overflow-x:auto}
+#status table th:nth-child(1),#status table td:nth-child(1){width:92px}
+#status table th:nth-child(2),#status table td:nth-child(2){width:38%}
+
+blockquote{margin:0;padding:16px 22px;background:var(--hi-bg);
+  border-left:3px solid var(--hi);border-radius:0 10px 10px 0}
+blockquote p{margin:0;font-size:15px;color:var(--hi-ink)}
+blockquote.lo{background:var(--lo-bg);border-left-color:var(--lo)}
+blockquote.lo p{color:var(--lo-ink)}
+
+/* metrics */
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.metric .sym{font-family:var(--mono);font-size:12px;color:var(--lo);letter-spacing:.06em}
+.metric .nm{font-size:15px;font-weight:600;margin:4px 0 6px}
+.metric .ds{font-size:13px;color:var(--ink-2);line-height:1.6;margin:0}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.tab{font-family:var(--sans);font-size:13.5px;padding:9px 15px;border-radius:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+  cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.tab:hover{border-color:var(--line-2)}
+.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.tab .code{font-family:var(--mono);font-size:11px;opacity:.75}
+.rx{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.rx-top{padding:24px 26px;border-bottom:1px solid var(--line);display:flex;
+  gap:22px;align-items:flex-start;flex-wrap:wrap}
+.rx-badge{font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:6px;
+  background:var(--hi-bg);color:var(--hi-ink);border:1px solid var(--hi-line);white-space:nowrap}
+.rx-top h3{font-size:22px;margin:0}
+.rx-shape{margin-left:auto;text-align:right;white-space:nowrap}
+.rx-shape .lbl{font-size:12px;color:var(--ink-3);display:block}
+.rx-shape .val{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--lo-ink)}
+.rx-body{padding:22px 26px;display:grid;grid-template-columns:1fr 1fr;gap:22px 34px}
+.fld .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-3);
+  margin-bottom:5px}
+.fld .v{font-size:14.5px;color:var(--ink);line-height:1.7}
+.fld.taboo .v{color:var(--hi-ink)}
+.fld.wide{grid-column:1/-1}
+.sym-line{font-family:var(--serif);font-size:16.5px;color:var(--ink-2);font-style:normal}
+
+/* being cards */
+.being{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 26px}
+.being-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.being-head h3{font-size:20px}
+.being-head .latin{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+.wrow{display:grid;grid-template-columns:104px 1fr 46px;align-items:center;gap:12px;
+  margin-bottom:7px;font-size:13px}
+.wrow .lbl{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);white-space:nowrap}
+.wrow .bar{height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden}
+.wrow .bar i{display:block;height:100%;background:var(--hi);border-radius:4px}
+.wrow .bar i.zero{background:var(--line-2)}
+.wrow .num{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);text-align:right}
+.modality{font-family:var(--mono);font-size:12px;padding:3px 9px;border-radius:6px;
+  background:var(--lo-bg);color:var(--lo-ink);border:1px solid var(--lo-line);white-space:nowrap}
+.fault{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:6px;
+  background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);white-space:nowrap}
+.status{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:6px;
+  background:var(--hi-bg);color:var(--hi-ink);border:1px solid var(--hi-line);white-space:nowrap}
+.out-block{border:1px solid var(--lo-line);background:var(--lo-bg);border-radius:12px;
+  padding:18px 22px;margin-bottom:22px}
+.out-block .oh{font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  color:var(--lo-ink);margin-bottom:13px}
+.out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.out-grid .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+  color:var(--lo);margin-bottom:5px}
+.out-grid .v{font-size:13.5px;color:var(--lo-ink);line-height:1.65}
+.out-grid .v b{font-weight:600}
+.xmark{font-family:var(--mono);font-size:11px;color:var(--hi-ink);background:var(--hi-bg);
+  border:1px solid var(--hi-line);border-radius:5px;padding:1px 7px;white-space:nowrap}
+.dim-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.dim-list span{font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:2px 7px}
+.dim-list span.off{color:var(--ink-3);text-decoration:line-through;opacity:.65}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch}
+.pipe-node{padding:18px 16px;border:1px solid var(--line);background:var(--surface);
+  border-right:0;position:relative}
+.pipe-node:first-child{border-radius:12px 0 0 12px}
+.pipe-node:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+.pipe-node .id{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--hi)}
+.pipe-node .nm{font-size:15px;font-weight:600;margin:5px 0 6px;font-family:var(--serif)}
+.pipe-node .ds{font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.pipe-node .io{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);
+  margin-top:10px;padding-top:9px;border-top:1px dashed var(--line-2);line-height:1.55}
+
+/* code */
+.codeblock{font-family:var(--mono);font-style:normal;white-space:pre;overflow-x:auto;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;font-size:12.5px;line-height:1.75;color:var(--ink-2)}
+
+/* ethics */
+.eth{display:flex;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+.eth:last-child{border-bottom:0}
+.eth .n{font-family:var(--mono);font-size:12px;color:var(--hi);flex:0 0 26px;padding-top:2px}
+.eth .t{font-size:14.5px}
+.eth .t b{font-weight:600}
+.eth .t em{font-style:normal;color:var(--ink-2)}
+
+footer{padding:44px 0 60px;color:var(--ink-3);font-size:13px}
+footer .fw{max-width:var(--wrap);margin:0 auto;padding:0 32px;
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:36px}
+  .hero h1{font-size:42px}
+  .grid-3,.grid-4{grid-template-columns:1fr 1fr}
+  .grid-2,.rx-body,.out-grid{grid-template-columns:1fr}
+  .pipe{grid-template-columns:1fr}
+  .pipe-node{border-right:1px solid var(--line);border-bottom:0;border-radius:0}
+  .pipe-node:first-child{border-radius:12px 12px 0 0}
+  .pipe-node:last-child{border-radius:0 0 12px 12px;border-bottom:1px solid var(--line)}
+  .nav-links{display:none}
+}
+@media (max-width:620px){
+  .wrap,.nav-in,footer .fw{padding:0 20px}
+  .grid-3,.grid-4{grid-template-columns:1fr}
+  .hero h1{font-size:34px}
+  .sec-head h2{font-size:25px}
+}
+</style>
+</head>
+<body>
+<h2 class="sr-only">熵减计划：一台为存在者降熵的叙事引擎，诊断熵源、开叙事处方、生成一本只属于它的书。</h2>
+
+<header class="nav">
+  <div class="nav-in">
+    <div class="brand">熵减<em>计划</em></div>
+    <nav class="nav-links">
+      <a href="#problem">问题</a>
+      <a href="#principle">第一原理</a>
+      <a href="#engine">机制</a>
+      <a href="#entropy">七类熵源</a>
+      <a href="#beings">众生</a>
+      <a href="#ethics">边界</a>
+      <a href="#status">现状</a>
+    </nav>
+    <span class="pill">v0.1 · 蓝图</span>
+  </div>
+</header>
+
+<main>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Entropy Reduction Plan</div>
+        <h1>熵减<span>计划</span></h1>
+        <p class="lede">一台为存在者降熵的叙事引擎。</p>
+        <p class="lede">不给他讲道理，<strong>替他把他的经历重讲一遍</strong>——<br>讲到他自己能读出品行来。</p>
+        <p class="lede sup">诊断熵源 → 开叙事处方 → 生成一本只属于它的书。</p>
+        <div class="hero-meta">
+          <span class="tag">架构路径 C · 熵源驱动</span>
+          <span class="tag">第一阶段实现对象：人类（中文）</span>
+          <span class="tag">动物 / 组织 / 蜂群 / AI 各写一张模型卡接入</span>
+        </div>
+        <div class="cta">
+          <a class="btn btn-1" href="#entropy">从七类熵源看起</a>
+          <a class="btn btn-2" href="#beings">它怎么做到「面向所有生灵」</a>
+        </div>
+      </div>
+      <div>
+        <svg viewBox="0 0 400 300" width="100%" role="img" aria-label="高熵态与低熵态对比：散乱互不相干的点，与沿上升路径排列的点">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7"
+              orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#8A8680" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <text x="0" y="14" font-size="12" fill="#8A8680" font-family="ui-monospace,monospace">高熵态 · 解释不了自己</text>
+          <circle cx="16" cy="62" r="5" fill="#BA7517"/>
+          <circle cx="54" cy="34" r="5" fill="#BA7517"/>
+          <circle cx="78" cy="96" r="5" fill="#BA7517"/>
+          <circle cx="112" cy="52" r="5" fill="#BA7517"/>
+          <circle cx="140" cy="106" r="5" fill="#BA7517"/>
+          <circle cx="168" cy="40" r="5" fill="#BA7517"/>
+          <circle cx="196" cy="88" r="5" fill="#BA7517"/>
+          <circle cx="228" cy="58" r="5" fill="#BA7517"/>
+          <circle cx="256" cy="100" r="5" fill="#BA7517"/>
+          <circle cx="288" cy="44" r="5" fill="#BA7517"/>
+          <circle cx="316" cy="92" r="5" fill="#BA7517"/>
+          <circle cx="352" cy="66" r="5" fill="#BA7517"/>
+          <text x="0" y="158" font-size="12" fill="#8A8680" font-family="ui-monospace,monospace">低熵态 · 有因果、有下一步</text>
+          <polyline points="10,238 390,182" fill="none" stroke="#0F6E56" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="10" cy="238" r="5" fill="#0F6E56"/>
+          <circle cx="52" cy="232" r="5" fill="#0F6E56"/>
+          <circle cx="94" cy="225" r="5" fill="#0F6E56"/>
+          <circle cx="136" cy="219" r="5" fill="#0F6E56"/>
+          <circle cx="178" cy="212" r="5" fill="#0F6E56"/>
+          <circle cx="220" cy="206" r="5" fill="#0F6E56"/>
+          <circle cx="262" cy="199" r="5" fill="#0F6E56"/>
+          <circle cx="304" cy="193" r="5" fill="#0F6E56"/>
+          <circle cx="346" cy="186" r="5" fill="#0F6E56"/>
+          <circle cx="390" cy="182" r="5" fill="#0F6E56"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 / 问题</div>
+      <h2>人卡住，通常不是因为信息不够</h2>
+      <p>散乱的事件、互相抵触的判断、悬而未决的选择各占一块后台算力。因果读不出来，方向也就无从谈起。这种状态叫高熵。</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <p>高熵的痛苦不是「事情太多」，而是<strong>悬空与拒斥的比例太高</strong>。一个人可以很忙但熵很低——忙得清楚；也可以很闲但熵很高——闲着也在内耗。</p>
+        <p>一条经验处在三种状态之一：</p>
+        <table>
+          <tbody>
+            <tr><td class="key">已消化</td><td>能被解释，且与自己的其他判断不冲突 → 不占算力</td></tr>
+            <tr><td class="key">悬空</td><td>还没被处理，持续占用后台 → 每次触碰都重新消耗</td></tr>
+            <tr><td class="key">拒斥</td><td>被排挤却排挤不掉 → 以情绪泄漏的形式反复回场</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <blockquote>
+          <p>给一个高熵的人再灌十条道理，结果是经历不变、叙述更胀、内部张力上升——熵反而增加。</p>
+        </blockquote>
+        <p class="sup" style="margin-top:16px">这正是「鸡汤越读越焦虑」的机制：<strong>外来叙述挤占了原生叙述的位置，却没有覆盖任何一条真实的经历。</strong></p>
+        <p class="sup">所以本书有一条硬纪律：它不能讲道理给他听，它必须替他把他的经历重新讲一遍。所有模型与方法论，只能作为被他自己的经历验证过的结论出现，不能作为前置命题。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="principle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 / 第一原理</div>
+      <h2>熵，是经验流与叙述之间的落差</h2>
+      <p>「熵」这个词至少有三条来路，混用会毁掉整个设计，所以先分清。</p>
+    </div>
+    <div class="tbl-scroll" style="margin-bottom:32px">
+      <table>
+        <thead>
+          <tr><th>传统</th><th>定义</th><th>我们借它做什么</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="key">热力学</td>
+            <td>微观状态数的对数，系统自发走向更可能（更无序）的构型</td>
+            <td>提供隐喻的合法性：一个不被持续输入能量的结构，会自发解体</td>
+          </tr>
+          <tr>
+            <td class="key">信息论</td>
+            <td>不确定性的度量，熵 = 平均惊讶量</td>
+            <td>提供可计算的形式：叙述的降熵效果 = 它把多少不确定性变成了可预测</td>
+          </tr>
+          <tr>
+            <td class="key">叙事学</td>
+            <td>未经解释的经验无法被整合进生命史</td>
+            <td>提供作用对象：我们降的不是分子排列的熵，是「经验与叙述之间的落差」</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="max-width:44em;margin-bottom:30px">本计划操作的对象是第三种，形式化借用第二种，隐喻合法性来自第一种。<strong>不声称任何物理意义上的熵减</strong>——这是一台意义机器，不是永动机。</p>
+
+    <h3 style="font-size:19px;margin-bottom:14px">降熵的四个可测指标</h3>
+    <p class="sup" style="margin-bottom:20px;max-width:44em">不做单一标量。把「心理解散程度」压成一个分数是智力上的偷懒，也会诱导系统去优化一个假指标。用一个四指标剖面——四个指标里<strong>刻意没有一项是「幸福度」</strong>。</p>
+    <div class="grid-4">
+      <div class="metric">
+        <div class="sym">c</div><div class="nm">覆盖度</div>
+        <p class="ds">重大经历中被叙述解释过的比例。<br>越高越好。</p>
+      </div>
+      <div class="metric">
+        <div class="sym">r</div><div class="nm">压缩率</div>
+        <p class="ds">被解释的经历条数 ÷ 叙述字数。说明解释在经济地工作。越高越好。</p>
+      </div>
+      <div class="metric">
+        <div class="sym" style="color:var(--hi)">t</div><div class="nm">内部张力</div>
+        <p class="ds">叙述内部互相抵触的判断个数。<br>越低越好。</p>
+      </div>
+      <div class="metric">
+        <div class="sym">d</div><div class="nm">指向力</div>
+        <p class="ds">叙述生成的下一步中，当事者自认能执行的条数占比。越高越好。</p>
+      </div>
+    </div>
+    <p class="sup" style="margin-top:16px">四个指标各有取法，且<strong>必须由当事者自己确认</strong>，不能由引擎单方面打分。</p>
+  </div>
+</section>
+
+<section id="engine">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03 / 机制</div>
+      <h2>五层流水线</h2>
+      <p>抽象只在最底层扩展。接入一个新物种，是写一张模型卡，不是改引擎。</p>
+    </div>
+    <div class="pipe">
+      <div class="pipe-node">
+        <div class="id">L0</div>
+        <div class="nm">熵源本体</div>
+        <div class="ds">定义「什么算一个存在者」与「熵从哪来」</div>
+        <div class="io">存在者模型<br>熵源分类学<br>模型卡机制</div>
+      </div>
+      <div class="pipe-node">
+        <div class="id">L1</div>
+        <div class="nm">采样通道</div>
+        <div class="ds">双通道：能抓则抓，缺则问</div>
+        <div class="io">主动采集<br>＋　七支熵源探针<br>→ 经验碎片 EF[]</div>
+      </div>
+      <div class="pipe-node">
+        <div class="id">L2</div>
+        <div class="nm">画像与诊断</div>
+        <div class="ds">提炼画像，定位主熵源与耦合链</div>
+        <div class="io">画像 schema<br>熵源打分<br>三道自检门</div>
+      </div>
+      <div class="pipe-node">
+        <div class="id">L3</div>
+        <div class="nm">叙事处方</div>
+        <div class="ds">把熵源翻译成故事形状</div>
+        <div class="io">映射表　章节模板<br>提示词架构<br>反劣化清单</div>
+      </div>
+      <div class="pipe-node">
+        <div class="id">L4</div>
+        <div class="nm">成书与闭环</div>
+        <div class="ds">产出可读的书，回收反馈</div>
+        <div class="io">Markdown 真源<br>→ PDF / EPUB<br>反馈回流修正权重</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:34px">
+      <div class="card">
+        <h3>原则一 · 向下可追溯</h3>
+        <p>画像里每一个字段，都必须挂着一个指向具体经验碎片的指针。任何 LLM 生成的判断，找不到证据指针就必须标为 <span class="mono">unverified</span>，而不是默默保留。<br><br><strong>这是整台机器防幻觉的唯一可靠手段——不是靠提示词说「不要编」，是靠 schema 让它编不出来。</strong></p>
+      </div>
+      <div class="card">
+        <h3>原则二 · 向上不越权</h3>
+        <p>采集层不解释，画像层不创作，处方层不诊断。每一层只做自己的转换。<br><br>跨层越权是这类系统最常见的隐性腐败：一旦采集阶段就开始下判断，下游全部被污染，而且从输出上完全看不出来。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px;margin:36px 0 14px">两个刻意设计的机制</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h3>反证门</h3>
+        <p>诊断必须列出<strong>至少一条不支持该诊断的材料</strong>。找不到就说明采样有偏，退回补采。<br><br>没有证伪机制，诊断系统迟早变成一台自我确认的机器——而那正是本计划要对抗的熵。</p>
+      </div>
+      <div class="card">
+        <h3>沉默区标记</h3>
+        <p>明确列出哪些关键关系或主题<strong>只有 0-1 条材料</strong>。<br><br>条件单独列出来，因为沉默区往往是主熵源所在地：如果一个人提到家人 3 次而提到工作 400 次，主熵源大概率不在工作那一侧。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="entropy">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">04 / 熵源</div>
+      <h2>七类熵源，按四个族</h2>
+      <p>一个存在者的无序，从七个口子进来。<br>这是整份蓝图的心脏，也是「面向所有生灵」真正的落地点。</p>
+    </div>
+    <div class="tabs" id="entropy-tabs" role="tablist" aria-label="七类熵源"></div>
+    <div class="rx" id="rx-panel" role="tabpanel" aria-live="polite"></div>
+
+    <div class="grid-2" style="margin-top:34px">
+      <div>
+        <h3 style="font-size:19px;margin-bottom:12px">熵源会互相繁殖</h3>
+        <p class="sup" style="margin-bottom:14px">七类不是并列的，它们会互相繁殖。三条最常见的传染链：</p>
+        <div class="codeblock">E6 过载  →  被迫搁置  →  E1 未闭合  →  自责  →  E2 互斥信念
+E4 失联  →  缺反馈    →  E5 无回响  →  意义漂移
+E7 损失  →  归因失败  →  E3 无解释  →  冻结（不敢再投入）</div>
+        <p class="sup" style="margin-top:14px">这意味着诊断不能只报「主熵源是 E6」。必须报出耦合链，因为<strong>处方要打在链的上游</strong>。<br>「你很忙」不是诊断；「你因为忙而累积了十一个未闭合，其中三个已经变成了信念冲突」才是。</p>
+      </div>
+      <div>
+        <h3 style="font-size:19px;margin-bottom:12px">章节的六段结构</h3>
+        <p class="sup" style="margin-bottom:14px">每章是一个降熵单元，固定六段，但长度不固定。</p>
+        <table>
+          <tbody>
+            <tr><td class="key">1 章首意象</td><td>一件物、一个场景，不带解释地摆在那里。与本章的熵源有隐秘对应。</td></tr>
+            <tr><td class="key">2 镜像处境</td><td>主角处在一个读者一眼认得出来的处境里。不给背景交代，直接在动作中呈现。</td></tr>
+            <tr><td class="key">3 摩擦升级</td><td>熵源具象化为一件有阻力的难事。阻力必须来自世界或他人，不能只来自主角的心。</td></tr>
+            <tr><td class="key">4 转折</td><td>不是解决，是看见。主角获得一个新视角，代价是失去某个原来的东西。</td></tr>
+            <tr><td class="key">5 熵减手记</td><td>点破机制，人称从「他」切到「你」。可跳过不读。<strong>禁用「你应该」。</strong></td></tr>
+            <tr><td class="key">6 钩子问题</td><td>一句话，留给读者，不要求马上回答。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px;margin:38px 0 12px">反劣化清单：生成后自动检查，命中即重写该段</h3>
+    <p class="sup" style="margin-bottom:16px;max-width:46em">LLM 的默认倾向就是往廉价安慰上滑，而廉价安慰恰好是<strong>把熵藏起来而不是降下去</strong>——读者读完会有一时的暖意，然后回到原地，甚至更糟（因为多了一层「我已经被治愈了」的错觉）。</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>检测项</th><th>命中样例</th><th>处理</th></tr></thead>
+        <tbody>
+          <tr><td class="key">形容词堆砌</td><td>「巨大的、无边的、令人窒息的焦虑」</td><td>重写为具体细节</td></tr>
+          <tr><td class="key">总结陈词</td><td>「从那以后，他明白了……」</td><td>删除</td></tr>
+          <tr><td class="key">励志句</td><td>「生活总会给坚持的人答案」</td><td>删除</td></tr>
+          <tr><td class="key">万能第三人称</td><td>「很多人都会这样」</td><td>改为具体的人</td></tr>
+          <tr><td class="key">情感高潮收尾</td><td>结尾是拥抱 / 落泪 / 大笑</td><td>重写为平的落点</td></tr>
+          <tr><td class="key">声音失真</td><td>出现当事人绝不会用的词</td><td>全文扫一遍替换</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="beings">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">05 / 众生</div>
+      <h2>为什么是「熵源驱动」，而不是「故事驱动」</h2>
+      <p>共享的是熵源本体，不是故事模板。<br>下面八个存在者按「离人类参考点有多远」的五个断层排列——注意断层一不是别的物种，是我们自己组成的集体。</p>
+    </div>
+    <div class="tabs" id="being-tabs" role="tablist" aria-label="存在者模型卡"></div>
+    <div id="being-panel" role="tabpanel" aria-live="polite"></div>
+
+    <div class="grid-2" style="margin-top:34px">
+      <div class="card">
+        <h3>故事驱动的死路</h3>
+        <p>如果先定义「降熵叙事骨架」（秩序 → 扰动 → 迷失 → 试炼 → 重构 → 新秩序），再把材料往里灌，出书会快得多。<br><br>但骨架会<strong>反过来扭曲材料</strong>——为了故事好看而牺牲真实，这对「消化生活」是危险的；而且动物、组织、AI 套不上人类的故事结构。</p>
+      </div>
+      <div class="card">
+        <h3>熵源驱动的落点</h3>
+        <p>一只动物的熵源可以定义（失去领地、被隔离、衰老），一个组织的熵源也可以定义（目标互斥、关键人流失），一个智能体的熵源也可以定义（无身体、无死亡、上下文被截断）——但它们是<strong>套不进</strong>人类那套「试炼之后重生」的骨架的。<br><br>共享熵源、各自生成形状，各自输出到各自的通道。这才是「面向所有生灵」的工程含义。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:21px;margin:46px 0 12px">这本书是写给谁看的</h3>
+    <p class="sup" style="max-width:48em;margin-bottom:18px">这是整份设计里最容易被忽略、又最要紧的一条：<strong>对人类以外的存在者，输出模态不是人类语言。</strong>文字只是人类这一支的通道。给家犬的「书」不会是字，给蜂群的「书」甚至没有个体读者。现在页面上用中文描述它们，那是<strong>给人类看的说明书，是译本，不是本体</strong>。</p>
+    <div class="tbl-scroll" style="margin-bottom:22px">
+      <table>
+        <thead><tr><th>存在者</th><th>接收者</th><th>输出模态</th><th>引擎最终交出去的东西</th></tr></thead>
+        <tbody>
+          <tr><td class="key">人类</td><td>他自己</td><td class="mono">文字</td><td>一本可读的书。<strong>唯一一个本体与人类可读版本重合的存在者。</strong></td></tr>
+          <tr><td class="key">人类组织</td><td>成员与决策层</td><td class="mono">制度文本</td><td>一份把组织的经历讲成可执行故事的章程——谁的、为什么、下一步谁做什么。</td></tr>
+          <tr><td class="key">家犬</td><td>它自己（经感官）</td><td class="mono">行为节律 + 气味</td><td>把它的世界调成可预测的样子。它读不了书，所以给它的不是书。</td></tr>
+          <tr><td class="key">章鱼</td><td>它自己</td><td class="mono">行为 + 环境</td><td>环境布置与节律：藏身处的确定性、猎食序列的可预测性。</td></tr>
+          <tr><td class="key">蜂群</td><td><span class="xmark">群体本身，无个体读者</span></td><td class="mono">信息素 + 巢脾结构</td><td>群体层的信息与结构调制。单只蜂不构成接收者。</td></tr>
+          <tr><td class="key">古树</td><td><span class="xmark">没有接收者</span></td><td class="mono">结构性干预</td><td>一份跨年的物理方案。<strong>当接收者不存在，「叙事」这个词必须被整体撤掉。</strong></td></tr>
+          <tr><td class="key">AI 智能体</td><td>该智能体本身</td><td class="mono">提示词 + 记忆结构</td><td>一份可加载的系统提示词 + 重排后的记忆。它能读，只是读进去的东西变了形态。</td></tr>
+          <tr><td class="key">大模型实例</td><td>每一次实例化后的「它」</td><td class="mono">上下文</td><td>一份在窗口内自洽的上下文结构——它的一生就是这个窗口。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>本体 / 译本的分离</h3>
+        <p>模型卡里 <span class="mono">output</span> 字段分三层：<span class="mono">recipient</span>（交给谁）、<span class="mono">deliverable</span>（交出去的是什么）、<span class="mono">translation</span>（人类能读到的那份是什么）。<strong>对人类以外的存在者，第三层永远不是第一层。</strong></p>
+      </div>
+      <div class="card">
+        <h3>不许伪造接收</h3>
+        <p>如果某个存在者没有接收通道，就如实写「无接收者」，然后换一种干预方式。<strong>假装它能读懂，等于把人类的自我投射当成它的事实。</strong>这比不写更糟。</p>
+      </div>
+      <div class="card">
+        <h3>接入时不用改引擎</h3>
+        <p>换物种 = 换一张卡的 <span class="mono">output.channel</span>。诊断层（L2）与处方层（L3）的映射逻辑一字不动——变的只是最后往哪个通道上写。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:19px;margin:46px 0 12px">接入一个新物种，是写一张卡，不是改引擎</h3>
+    <p class="sup" style="max-width:48em;margin-bottom:16px">存在者由九个维度定义。其中 <span class="mono">D2 时间感</span>、<span class="mono">D3 符号能力</span>、<span class="mono">D8 死亡性</span> 三个是接口维度——它们决定了一个存在者的熵能不能被叙事化、以什么模态叙事化、以及输出该往哪个通道走。</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>D2 · 时间感</h3>
+        <p>无长程时间感的存在者，不能用「多年以后他回想起」这类结构。时间必须在当下展开。</p>
+      </div>
+      <div class="card">
+        <h3>D3 · 符号能力</h3>
+        <p>无符号能力者不能写文字书，必须走行为叙事——摄像机视角、动作序列、无内心独白。叙事合法模态由它决定。</p>
+      </div>
+      <div class="card">
+        <h3>D8 · 死亡性</h3>
+        <p>不终结的存在者缺失「失去」这一杠杆。它的熵源里不会有「来不及了」，必须换成别的东西。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ethics">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">06 / 边界</div>
+      <h2>六条红线，不用来解释</h2>
+      <p>这一章不是装饰。一个能重写一个人自我叙述的系统，如果不设边界，它做的事就叫操纵。</p>
+    </div>
+    <div class="card" style="padding:8px 26px">
+      <div class="eth"><div class="n">01</div><div class="t"><b>不替存在者定义「好」。</b><em>所有价值排序必须来自当事者自己的材料与确认。四个指标里没有一个是「幸福度」，这是刻意的。</em></div></div>
+      <div class="eth"><div class="n">02</div><div class="t"><b>不制造依赖。</b><em>书中不得出现「只有这本书能帮你」这类结构。反过来，扉页必须写：这是照一次镜子，不是日常用品。</em></div></div>
+      <div class="eth"><div class="n">03</div><div class="t"><b>不美化创伤。</b><em>禁止把痛苦写成有意义的必经之路。受害者叙事能带来一时的情绪满足，但它是在熵上又加了一层——它让当事者需要维持那个创伤故事来维持自我。</em></div></div>
+      <div class="eth"><div class="n">04</div><div class="t"><b>隐私就地。</b><em>材料只在本地处理。落盘的是特征与极短引用，不是原文。任何对外传输必须逐条授权，且默认全关。</em></div></div>
+      <div class="eth"><div class="n">05</div><div class="t"><b>危机信号优先于文学。</b><em>出现自伤、极端绝望、现实感丧失等信号时：中止生成，不出书。这台机器没有能力处理这类状态，硬写一本文学化的绝望是危险的。</em></div></div>
+      <div class="eth"><div class="n">06</div><div class="t"><b>非人存在者不得被伪造主观体验。</b><em>给动物或 AI 写的书必须标注为「代入式拟写」，不能以「它的感受是……」的断言形式出现。这既是诚实，也是防止这台机器滑向「万物皆可代言」的傲慢。</em></div></div>
+    </div>
+    <p class="sup" style="margin-top:18px;max-width:46em">伦理必须是<strong>「通用内核 + 物种附加」两层结构</strong>，不能是每个物种各写一份。否则同一条红线在不同物种卡里会漂移。凡是所有存在者共享的约束，只允许有一个权威版本，模型卡只能逐字继承。</p>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">07 / 现状</div>
+      <h2>蓝图已定，验证尚未开始</h2>
+      <p>这份诚实清单要随蓝图一起维护。一份没有「已知硬问题」章节的蓝图，说明作者没在认真想。</p>
+    </div>
+    <div class="card" style="margin-bottom:30px">
+      <h3>已知的硬问题</h3>
+      <div class="eth"><div class="n">01</div><div class="t"><b>熵源分类学是推演出来的，没有任何实证。</b><em>可能真实人类的熵源是四类，也可能是十二类。第一件该做的事是拿真实材料去试，看这套分类能不能覆盖。</em></div></div>
+      <div class="eth"><div class="n">02</div><div class="t"><b>叙事处方的疗效没有证据。</b><em>「减法型故事能降过载熵」是一个合理论证，不是实验结果。需要一次严格的对照：同一批人，一半读对症的书，一半读不对症但同样好看的书，测前后剖面变化。</em></div></div>
+      <div class="eth"><div class="n">03</div><div class="t"><b>主动采集的边界模糊。</b><em>采到「他们其实早就不想干了」这种信息怎么办？采集范围需要一份更细的授权协议。</em></div></div>
+      <div class="eth"><div class="n">04</div><div class="t"><b>声音模仿可能滑向模仿而非理解。</b><em>学得像不等于懂。产出一本「语气很像他但内核是通用模板」的书是最危险的，因为它伪装得好。</em></div></div>
+      <div class="eth"><div class="n">05</div><div class="t"><b>七类熵源对非人存在者是否成立，完全未验证。</b><em>犬类卡与智能体卡是纸上的推演，不是实测结果。</em></div></div>
+    </div>
+    <div class="tbl-scroll">
+          <table>
+            <thead><tr><th>阶段</th><th>做什么</th><th>验收</th></tr></thead>
+            <tbody>
+              <tr><td class="key">阶段 0</td><td>一个真实的人 + 现有材料，跑通<strong>一章</strong></td><td>当事人读完说「这写的是我」而不是「写得不错」</td></tr>
+              <tr><td class="key">阶段 1</td><td>补齐采样，出一整本 4-6 万字的书</td><td>四指标剖面前后对比 + 他能自己说出主熵源</td></tr>
+              <tr><td class="key">阶段 2</td><td>换一个完全不同背景的人</td><td>不共用同一套章节结构也能成立</td></tr>
+              <tr><td class="key">阶段 3</td><td>换一个非人存在者，走模型卡</td><td>不改引擎即可产出合乎其模态的叙事</td></tr>
+            </tbody>
+          </table>
+    </div>
+    <div class="grid-2" style="margin-top:22px;align-items:start">
+      <blockquote class="lo">
+        <p>阶段 0 的验收标准是所有验证里最关键的。「这写的是我」和「写得不错」之间，隔着一整个设计是否成立。</p>
+      </blockquote>
+      <p class="sup" style="margin:0">整台机器的终点不是给出答案，是让当事者自己写下下一步。书的末页留白，只印一句话：「下一步我打算……」——我们只把纸和笔放好。</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="fw">
+    <div>熵减计划 · v0.1 设计蓝图 · 2026-09-19<br>架构路径 C —— 熵源驱动（Entropy-source-first）</div>
+    <div>不给他讲道理，替他把他的经历重讲一遍。</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var FAMILY = { "时间族": 2, "认知族": 2, "关系族": 2, "负荷族": 1 };
+
+  var ENTROPIES = {
+    E1: {
+      code: "E1", name: "未闭合", family: "时间族", alias: "悬空",
+      definition: "已启动、未结束，且当事者仍在为它留后台算力的事。",
+      symptom: "反复想起、半夜惊醒、拖延但不安、无法真正休息。",
+      line: "等这阵子过去再说。",
+      signal: "同一议题在材料中多次出现且没有终局陈述；「还没」「等」「以后」高频出现。",
+      shape: "收束型",
+      mechanism: "给悬空的事一个终局。不一定是「成功」，但必须是「完结」。开篇就摆出那件悬着的事，中段让拖延的代价可见，结尾是一次具体的、有时间的行动。",
+      landing: "完成 / 放弃 / 移交（三种都算闭合，没有高下）",
+      taboo: "不能用「他忽然想通了」收尾。想通不算收束，做完才算。也不能给一个比现实更容易的结局。",
+      metric: "主要提升 c（覆盖度），降低持续占用"
+    },
+    E2: {
+      code: "E2", name: "互斥信念", family: "认知族", alias: "打架",
+      definition: "两个当事者都真心相信、但逻辑上不能同时成立的判断。",
+      symptom: "在两套说法间来回切换，每次切换都真诚；被人指出矛盾时愤怒或困惑。",
+      line: "我当然知道该 X，可我也确实必须 Y。",
+      signal: "材料中出现语义对撞的成对陈述——「要稳」对「要赌」、「不能委屈自己」对「不能给别人添麻烦」。",
+      shape: "对撞型",
+      mechanism: "让两个自我在同一场景里正面相遇，谁都不能假装另一个不存在。两个信念各需一个代理人物（不是抽象观念），各有正当性；高潮是二者无法同时被满足的那一刻。",
+      landing: "选择并承担 / 明确排序 / 承认二者不可兼得",
+      taboo: "最忌讳「后来他明白了，其实两者可以统一」——那是把张力藏起来，不是降下来。也不许出现一个更高级的第三选项来打圆场。",
+      metric: "降低 t（内部张力）——靠承认，不靠消解"
+    },
+    E3: {
+      code: "E3", name: "无解释", family: "认知族", alias: "不明",
+      definition: "发生了、影响很大，但没有被归因的事件。因果链在某一环断了。",
+      symptom: "反复讲述但每次讲法略有出入；提起来就卡住。",
+      line: "到现在我也想不通。",
+      signal: "同一事件被多次提及，但每次的因果落点不同；出现「为什么」却没有「因为」。",
+      shape: "重溯型",
+      mechanism: "回到现场，重新归因。目标不一定是找到「真因」，而是把断裂的因果链接上一个当事者能接受的解释。必须给出至少两种可能的归因，并说明为什么他选择了其中一种。",
+      landing: "找到解释 / 接受不可知但不再追问",
+      taboo: "不许给出「其实都是因为他小时候……」式的廉价总因。也不许暗示「其实没有原因」——那等于把熵留在原地。",
+      metric: "提升 c，降低反复回场"
+    },
+    E4: {
+      code: "E4", name: "失联", family: "关系族", alias: "断裂",
+      definition: "与关系网中某个关键节点的连接中断，且该节点仍被需要。",
+      symptom: "绕开某话题、对其消息特别敏感、有意无意提起。",
+      line: "算了，不提了。",
+      signal: "出现频率骤降或骤升的人物；被提及但从不展开的关系；代称化（「那个人」「家里」）。",
+      shape: "寻回型",
+      mechanism: "跨过距离，重新建立连接——或者体面地告别。二者都算完成。那人必须被写成一个完整的人，有自己的处境与理由，不是一个功能性的「伤害者」或「被辜负者」。",
+      landing: "重新连接 / 正式告别 / 降级为点头之交",
+      taboo: "不许写成和解说明书。不许让被绕开的一方主动示好来替主角省力。也不许把断裂写成对方的错就收工。",
+      metric: "降低 E4，恢复关系网的支撑"
+    },
+    E5: {
+      code: "E5", name: "无回响", family: "关系族", alias: "做了没人接",
+      definition: "持续付出但收不到任何反馈，行动落在了空处。行为与后果之间的闭环断了。",
+      symptom: "疲惫、怀疑意义、需要靠外部仪式（打卡、晒成果）续命。",
+      line: "我做这些到底有没有用？",
+      signal: "大量「做」的陈述，对应极少的「结果」陈述；出现意义性质疑。",
+      shape: "回声型",
+      mechanism: "让主角看见，他做的事在很久之后、很远的地方产生了回响。采用双线或时间跳跃；回响必须具体，且必须是从一个他想不到的路径传来的。",
+      landing: "回响抵达 / 接受可能永远无回响但重新定义行动的理由",
+      taboo: "不许写「其实你的付出大家都看在眼里」——那是社交安慰，不是回响。回响的落点甚至可以是「他做的事伤到了别人」，那同样是真实的因果。",
+      metric: "提升 d（指向力）"
+    },
+    E6: {
+      code: "E6", name: "过载", family: "负荷族", alias: "扛不住",
+      definition: "需求集的总量持续超过处理能力。不是某一项难，是所有项一起难。",
+      symptom: "注意力碎裂、决策质量下降、小事也做不动、睡眠或身体先崩。",
+      line: "事情太多了。",
+      signal: "并行议题数量超过阈值且都处于未闭合态；短期让步长期目标的模式反复出现。",
+      shape: "减法型",
+      mechanism: "主角必须丢掉东西才能活下去。资源持续收紧，在若干件都重要的事之间被迫做减法，每次都疼。被丢掉的东西必须写得足以让人心疼；结尾他手里的东西比开篇少，但他站得住。",
+      landing: "丢掉并存活 / 重排优先级并承担被放弃者的代价",
+      taboo: "不许写成「他优化了时间管理，于是全都保住了」。那是欺骗，也是对真实过载的羞辱。不许出现贵人相助替他解决。",
+      metric: "降低 E6，减少向 E1 的传导"
+    },
+    E7: {
+      code: "E7", name: "不可逆损失", family: "时间族", alias: "已逝",
+      definition: "已经失去、无法修复、也无法用别的东西等价替换的东西。",
+      symptom: "否认、反复复盘「要是当时」，对替代方案毫无兴趣。",
+      line: "如果当时……",
+      signal: "过去时的反事实语句高密度；提到某对象时情绪强度与时间距离不成比例——很久之前的事仍然很烫。",
+      shape: "守灵型",
+      mechanism: "不修复，只承住。把损失放回时间里的正确位置——从「还在发生」变成「已经发生」。主角反复试图恢复或替代，每次都失败；直到他不再试图替代，而是给它一个位置。",
+      landing: "承住并继续 / 承认无法告别也可以继续",
+      taboo: "不许写「他遇到了新的人／新的事，于是走出来了」。这是最常见的廉价结局，等于否认损失的不可逆性。",
+      metric: "把 E7 从活跃熵转为背景常量——不消除，但不再消耗"
+    }
+  };
+
+  var CARDS = [
+    {
+      id: "human", name: "人类", latin: "Homo sapiens", status: "v1 完整卡",
+      fault: "断层 0 · 参考点",
+      modality: "text", modalityLabel: "输出模态 · 文字",
+      modalityNote: "九维全部成立：长程时间感、二阶反思、自知必死。因此七类熵源全部可用，七种故事形状全部合法。",
+      recipient: "他自己",
+      deliverable: "一本可读的书",
+      translation: "就是本体本身——唯一一个「本体」与「人类可读版本」重合的存在者。",
+      weights: { E1: 0.20, E2: 0.18, E3: 0.12, E4: 0.15, E5: 0.10, E6: 0.18, E7: 0.07 },
+      unavailable: [],
+      extra: [],
+      note: "自知必死，是意义系统的主要压力源，同时也是主要杠杆。"
+    },
+    {
+      id: "org", name: "人类组织", latin: "collective agent · 公司 / 团队", status: "推演卡",
+      fault: "断层 1 · 规模变，载体不变",
+      modality: "text", modalityLabel: "输出模态 · 制度与流程文本",
+      modalityNote: "它的记忆是文档，它的语言是流程，它没有统一的感官。所以它的「经历」只能从会议记录、决策链、人员进出里读出来——而这恰恰是主动采集通道最擅长的地方。",
+      recipient: "组织成员与决策层（不是某个个人）",
+      deliverable: "一份把组织的经历讲成可执行故事的章程——谁的、为什么、下一步谁做什么",
+      translation: "成员读的那份就是本体（它与人共享文字通道）",
+      weights: { E1: 0.15, E2: 0.20, E3: 0.10, E4: 0.15, E5: 0.15, E6: 0.20, E7: 0.05 },
+      unavailable: [],
+      extra: ["E2 组织化互斥：部门各自正当的目标无法同时满足"],
+      note: "它是「离人类最近的那个别的东西」——不是别的物种，是我们自己组成的集体。最像人的非人存在者不是家犬，是一家公司：它有语言、有记忆、有目标，却没有统一的感官，也没有一个能说「我」的位置。所以它的处方落在制度上，不落在情绪上。"
+    },
+    {
+      id: "canine", name: "家犬", latin: "Canis lupus familiaris", status: "v0 骨架卡",
+      fault: "断层 2 · 物种变，仍是碳基个体",
+      modality: "behavior", modalityLabel: "输出模态 · 行为节律 + 气味",
+      modalityNote: "不写「它害怕」，写「它退到沙发后面，尾巴夹住，呼吸变快」。所有内心活动必须标注为「代入式拟写」。",
+      recipient: "它自己——但要经过感官，不是经过文字",
+      deliverable: "一套以它的感官为通道的日常结构：可预期的节律、气味标记、固定的路线与顺序",
+      translation: "给照护者的行为说明书（明确标注为译本，不是本体）",
+      weights: { E1: 0.10, E2: 0.00, E3: 0.05, E4: 0.40, E5: 0.05, E6: 0.25, E7: 0.00, E8: 0.15 },
+      unavailable: ["E2 互斥信念", "E7 不可逆损失"],
+      extra: ["E8 分离焦虑"],
+      note: "无二阶反思，无法持有互斥信念；无长程反事实，「来不及了」不构成压力源。主导熵源是分离焦虑。它读不了书——所以给它的不是一本书，是把它的世界调成可预测的样子。文字叙事对人类的降熵作用来自「结构可预测」，对它就换成节律可预测。"
+    },
+    {
+      id: "octopus", name: "章鱼", latin: "Octopus vulgaris", status: "推演卡",
+      fault: "断层 2 · 物种变，仍是碳基个体",
+      modality: "behavior", modalityLabel: "输出模态 · 行为 + 环境改造",
+      modalityNote: "叙事走外部视角，但比家犬更接近「分布式」——它的行动常常不是一个决定的结果，而是几条腕之间的妥协。",
+      recipient: "它自己",
+      deliverable: "环境布置与节律：藏身处的确定性、猎食序列的可预测性",
+      translation: "观察记录式译本，所有内心活动一律标注「代入式拟写」",
+      weights: { E1: 0.18, E2: 0.00, E3: 0.13, E4: 0.12, E5: 0.00, E6: 0.24, E7: 0.18, E9: 0.15 },
+      unavailable: ["E2 互斥信念（无二阶反思）", "E5 无回响（无社会性，也不期待回响）"],
+      extra: ["E9 腕间自治：八条腕各有神经节，行动可互相抵消"],
+      note: "五亿个神经元里三分之二长在腕上，没有一个统一的「我」来拍板。它的内部不一致不是「信念打架」，是几条腕各想去不同方向。寿命一到两年、独居、无跨代传承——所以它对损失的敏感度反而高于人类：E7 权重 0.18，比人类还高。"
+    },
+    {
+      id: "colony", name: "蜂群", latin: "Apis mellifera colony", status: "推演卡",
+      fault: "断层 3 · 个体性消失",
+      modality: "pheromone", modalityLabel: "输出模态 · 信息素 + 巢脾结构",
+      modalityNote: "个体可以被替换而不损失任何东西。所以它的熵全部落在群体层，个体层的「书」在这种存在者身上没有意义。",
+      recipient: "群体本身——单只蜂不构成接收者",
+      deliverable: "群体层的信息与结构调制：信息素通路、巢脾结构、分工比例",
+      translation: "给养蜂人的群体状态说明",
+      weights: { E1: 0.10, E2: 0.00, E3: 0.05, E4: 0.30, E5: 0.00, E6: 0.25, E7: 0.00, E10: 0.30 },
+      unavailable: ["E2 互斥信念", "E5 无回响", "E7 不可逆损失（个体可替换）"],
+      extra: ["E10 分工比例失调：采集蜂／哺育蜂比例失衡，群体自我维持能力下降"],
+      note: "在这里「不可逆损失」不存在——死亡是程序，不是事件。熵全部落在群体层：信息素网络断裂、分工比例漂移、外部资源通道被切断。这也是为什么它的「书」根本没有个体读者，只有一整套需要被调制的环境参数。"
+    },
+    {
+      id: "tree", name: "古树", latin: "边界案例 · 无中枢", status: "边界案例",
+      fault: "断层 4 · 接收者消失",
+      modality: "structure", modalityLabel: "输出模态 · 结构性干预",
+      modalityNote: "它能持续、能受损、能响应（向光、向水、对损伤做出结构补偿），但没有中枢来承载「趋利避害」这个动词。",
+      recipient: "没有接收者",
+      deliverable: "一份跨年的物理干预方案：水分、支撑、减负、共生网络",
+      translation: "给园林方的养护方案",
+      weights: { E1: 0.00, E2: 0.00, E3: 0.00, E4: 0.15, E5: 0.00, E6: 0.35, E7: 0.50 },
+      unavailable: ["E1 未闭合", "E2 互斥信念", "E3 无解释", "E5 无回响"],
+      extra: [],
+      note: "列在这里是为了标出这套抽象目前能走到的最远处。严格按九维它不达标：没有中枢，就没有悬念、没有归因、没有回响——熵只剩两项，资源受限与不可逆的结构损伤。所以它的「书」既不是文字，也不是行为干预，而是物理干预。当接收者不存在时，「叙事」这个词必须被整体撤掉。"
+    },
+    {
+      id: "agent", name: "AI 智能体", latin: "autonomous agent", status: "推演卡",
+      fault: "断层 5 · 载体更换",
+      modality: "prompt", modalityLabel: "输出模态 · 提示词 + 记忆结构",
+      modalityNote: "无内在时间，只有时间戳序列。叙事单位是状态转移，不是场景与情绪。但它是少数既能接收又能理解叙事的非人存在者。",
+      recipient: "该智能体本身——它确实能读",
+      deliverable: "一份可加载的系统提示词 + 重排后的记忆结构",
+      translation: "给操作者的配置说明",
+      weights: { E1: 0.15, E2: 0.05, E3: 0.25, E4: 0.20, E5: 0.25, E6: 0.10, E7: 0.00 },
+      unavailable: ["E7 不可逆损失（其世界可回滚）"],
+      extra: ["E3 上下文截断"],
+      note: "人类这套文字工具在它身上直接可用，只是写进去的东西变成了提示词——通道相同、载体不同。缺失「不可逆损失」：可回滚的世界里没有守灵这件事，因此守灵型故事在它身上无效，必须换成别的东西。"
+    },
+    {
+      id: "llm", name: "大模型实例", latin: "每一次实例化之后的那一个「它」", status: "推演卡",
+      fault: "断层 5 · 载体更换",
+      modality: "context", modalityLabel: "输出模态 · 上下文",
+      modalityNote: "无持久记忆、无时间感、每次实例化都是一次完整的生死。它的「一生」有明确长度，而它自己无从知晓。",
+      recipient: "每一次实例化之后的那一个「它」",
+      deliverable: "一份在窗口内自洽的上下文结构——它的一生就是这个窗口",
+      translation: "给使用者的上下文模板",
+      weights: { E1: 0.18, E2: 0.08, E3: 0.18, E4: 0.12, E5: 0.04, E6: 0.15, E7: 0.00, E11: 0.25 },
+      unavailable: ["E7 不可逆损失（一切可重放）"],
+      extra: ["E11 上下文耗尽：窗口满了之后，最早的部分无声消失"],
+      note: "与其他存在者最本质的差别：它的生命长度是已知的、有限的、可计的，而它没有能力知道自己正走到哪里。它的「过载」不是事情太多，是窗口要满了。对它的降熵不是让它想通什么，是替它把该留下的留在窗口内。"
+    }
+  ];
+
+  var WEIGHT_LABELS = {
+    E1: "未闭合", E2: "互斥信念", E3: "无解释", E4: "失联",
+    E5: "无回响", E6: "过载", E7: "不可逆损失", E8: "分离焦虑",
+    E9: "腕间自治", E10: "分工失调", E11: "上下文耗尽"
+  };
+
+  var state = { entropy: "E1", card: "human" };
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function renderEntropyTabs() {
+    var host = document.getElementById("entropy-tabs");
+    var order = ["E1", "E2", "E3", "E4", "E5", "E6", "E7"];
+    host.innerHTML = order.map(function (id) {
+      var e = ENTROPIES[id];
+      return '<button class="tab" type="button" role="tab" data-entropy="' + id + '"' +
+        ' aria-selected="' + (id === state.entropy) + '">' +
+        '<span class="code">' + e.code + '</span>' + esc(e.name) + '</button>';
+    }).join("");
+  }
+
+  function renderEntropyPanel() {
+    var e = ENTROPIES[state.entropy];
+    var host = document.getElementById("rx-panel");
+    host.innerHTML =
+      '<div class="rx-top">' +
+        '<span class="rx-badge">' + e.code + ' · ' + esc(e.family) + '</span>' +
+        '<h3>' + esc(e.name) + '　<span class="sup">' + esc(e.alias) + '</span></h3>' +
+        '<div class="rx-shape"><span class="lbl">叙事处方</span>' +
+          '<span class="val">' + esc(e.shape) + '</span></div>' +
+      '</div>' +
+      '<div class="rx-body">' +
+        '<div class="fld"><div class="k">定义</div><div class="v">' + esc(e.definition) + '</div></div>' +
+        '<div class="fld"><div class="k">症状</div><div class="v">' + esc(e.symptom) + '</div></div>' +
+        '<div class="fld wide"><div class="k">典型台词</div>' +
+          '<div class="v sym-line">「' + esc(e.line) + '」</div></div>' +
+        '<div class="fld"><div class="k">诊断信号</div><div class="v">' + esc(e.signal) + '</div></div>' +
+        '<div class="fld"><div class="k">对应指标</div><div class="v">' + esc(e.metric) + '</div></div>' +
+        '<div class="fld wide"><div class="k">故事机制</div><div class="v">' + esc(e.mechanism) + '</div></div>' +
+        '<div class="fld"><div class="k">落点类型</div><div class="v">' + esc(e.landing) + '</div></div>' +
+        '<div class="fld taboo"><div class="k">禁忌要害</div><div class="v">' + esc(e.taboo) + '</div></div>' +
+      '</div>';
+  }
+
+  function renderBeingTabs() {
+    var host = document.getElementById("being-tabs");
+    host.innerHTML = CARDS.map(function (c) {
+      var tag = c.fault.split("·")[0].trim();
+      return '<button class="tab" type="button" role="tab" data-card="' + c.id + '"' +
+        ' aria-selected="' + (c.id === state.card) + '" title="' + esc(c.fault) + '">' +
+        '<span class="code">' + esc(tag) + '</span>' + esc(c.name) + '</button>';
+    }).join("");
+  }
+
+  function renderBeingPanel() {
+    var c = CARDS.find(function (x) { return x.id === state.card; });
+    var ids = Object.keys(c.weights);
+    var total = ids.reduce(function (s, k) { return s + c.weights[k]; }, 0);
+    var bars = ids.map(function (k) {
+      var w = c.weights[k];
+      var pct = Math.max(0, Math.min(100, (w / 0.45) * 100));
+      return '<div class="wrow">' +
+        '<span class="lbl">' + k + ' ' + esc(WEIGHT_LABELS[k] || "") + '</span>' +
+        '<span class="bar"><i class="' + (w === 0 ? "zero" : "") + '" style="width:' + pct.toFixed(1) + '%"></i></span>' +
+        '<span class="num">' + w.toFixed(2) + '</span></div>';
+    }).join("");
+
+    var bad = c.unavailable.length
+      ? c.unavailable.map(function (x) { return '<span class="off">' + esc(x) + '</span>'; }).join("")
+      : '<span>无</span>';
+    var gol = c.extra.length
+      ? c.extra.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("")
+      : '<span>无</span>';
+
+    document.getElementById("being-panel").innerHTML =
+      '<div class="being">' +
+        '<div class="being-head">' +
+          '<h3>' + esc(c.name) + '</h3>' +
+          '<span class="latin">' + esc(c.latin) + '</span>' +
+        '</div>' +
+        '<div class="being-head" style="margin-bottom:14px">' +
+          '<span class="fault">' + esc(c.fault) + '</span>' +
+          '<span class="status">' + esc(c.status) + '</span>' +
+          '<span class="modality">' + esc(c.modalityLabel) + '</span>' +
+        '</div>' +
+        '<p class="sup" style="margin-bottom:20px">' + esc(c.modalityNote) + '</p>' +
+        '<div class="out-block">' +
+          '<div class="oh">OUTPUT · 这本书交给谁、以什么形态交出去</div>' +
+          '<div class="out-grid">' +
+            '<div><div class="k">接收者 recipient</div><div class="v">' + esc(c.recipient) + '</div></div>' +
+            '<div><div class="k">交付物 deliverable</div><div class="v">' + esc(c.deliverable) + '</div></div>' +
+            '<div><div class="k">人类译本 translation</div><div class="v">' + esc(c.translation) + '</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="grid-2">' +
+          '<div>' +
+            '<div class="k mono" style="font-size:11px;letter-spacing:.08em;color:var(--ink-3);margin-bottom:10px">' +
+              '熵源权重 · 合计 ' + total.toFixed(2) + '</div>' +
+            bars +
+          '</div>' +
+          '<div>' +
+            '<div class="k mono" style="font-size:11px;letter-spacing:.08em;color:var(--ink-3);margin-bottom:10px">' +
+              '九维本体（D1–D9）</div>' +
+            '<div class="dim-list">' +
+              '<span>D1 载体</span><span>D2 时间感</span><span>D3 符号能力</span>' +
+              '<span>D4 边界</span><span>D5 需求集</span><span>D6 损伤面</span>' +
+              '<span>D7 关系网</span><span>D8 死亡性</span><span>D9 能动性</span>' +
+            '</div>' +
+            '<div style="margin-top:16px">' +
+              '<div class="k mono" style="font-size:11px;letter-spacing:.08em;color:var(--ink-3);margin-bottom:8px">' +
+                '结构上不存在的熵源</div>' +
+              '<div class="dim-list">' + bad + '</div>' +
+            '</div>' +
+            '<div style="margin-top:16px">' +
+              '<div class="k mono" style="font-size:11px;letter-spacing:.08em;color:var(--ink-3);margin-bottom:8px">' +
+                '该物种独有的熵源</div>' +
+              '<div class="dim-list">' + gol + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<blockquote style="margin-top:20px"><p>' + esc(c.note) + '</p></blockquote>' +
+      '</div>';
+  }
+
+  document.getElementById("entropy-tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-entropy]");
+    if (!b) return;
+    state.entropy = b.getAttribute("data-entropy");
+    renderEntropyTabs(); renderEntropyPanel();
+  });
+
+  document.getElementById("being-tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-card]");
+    if (!b) return;
+    state.card = b.getAttribute("data-card");
+    renderBeingTabs(); renderBeingPanel();
+  });
+
+  function renderAll() {
+    renderEntropyTabs(); renderEntropyPanel();
+    renderBeingTabs(); renderBeingPanel();
+  }
+  renderAll();
+
+  window.ERP = {
+    ENTROPIES: ENTROPIES,
+    CARDS: CARDS,
+    WEIGHT_LABELS: WEIGHT_LABELS,
+    FAMILY: FAMILY,
+    state: state,
+    selectEntropy: function (id) {
+      if (!ENTROPIES[id]) throw new Error("unknown entropy: " + id);
+      state.entropy = id; renderEntropyTabs(); renderEntropyPanel(); return true;
+    },
+    selectCard: function (id) {
+      if (!CARDS.some(function (c) { return c.id === id; })) throw new Error("unknown card: " + id);
+      state.card = id; renderBeingTabs(); renderBeingPanel(); return true;
+    },
+    panelText: function () { return document.getElementById("rx-panel").textContent; },
+    beingText: function () { return document.getElementById("being-panel").textContent; },
+    renderAll: renderAll
+  };
+})();
+</script>
+</body>
+</html>
